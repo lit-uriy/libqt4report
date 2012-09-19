@@ -44,16 +44,44 @@
 		</xsd:complexType>
 	</xsd:element>
 	
-	<xsd:element name="item">
+	<xsd:element name="item" abstract="true">
 		<xsd:complexType>
 			<xsd:attribute ref="id" use="required" />
-			<xsd:attribute ref="fontId" use="required" />
-			<xsd:attribute ref="value" />
 			<xsd:attribute ref="x" use="required" />
 			<xsd:attribute ref="y" use="required" />
 			<xsd:attribute ref="width" use="required" />
 			<xsd:attribute ref="height" use="required" />
-			<xsd:attribute ref="align" />
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="textItem" abstract="true">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="item">
+					<xsd:attribute ref="fontId" use="required" />
+					<xsd:attribute ref="align" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+
+	<xsd:element name="textItemFixed">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="itemText">
+					<xsd:attribute ref="value" use="required" />
+				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="textItemField">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="itemText">
+					<xsd:attribute name="fieldName" use="required" />
+				</xsd:extension>
+			</xsd:complexContent>
 		</xsd:complexType>
 	</xsd:element>
 	
@@ -88,7 +116,7 @@
 			<xsd:element ref="line" minOccurs="0" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
-	
+
 	<xsd:element name="docBody">
 		<xsd:complexType>
 			<xsd:complexContent>
@@ -104,9 +132,11 @@
 	<xsd:element name="body">
 		<xsd:complexType>
 			<xsd:sequence>
+				<xsd:element name="pageHeader" type="docBand" minOccurs="0" maxOccurs="1" />
 				<xsd:element name="docHeader" type="docBand" minOccurs="0" maxOccurs="1" />
 				<xsd:element ref="docBody" />
 				<xsd:element name="docFooter" type="docBand" minOccurs="0" maxOccurs="1" />
+				<xsd:element name="pageFooter" type="docBand" minOccurs="0" maxOccurs="1" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
