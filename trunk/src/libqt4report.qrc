@@ -1,0 +1,5 @@
+<RCC>
+  <qresource prefix="libqt4report">
+    <file>schema/libqt4report.xsd</file>
+  </qresource>
+</RCC>
