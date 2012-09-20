@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<document	xmlns="http://corentin-lebail.eu/libqt4report"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://corentin-lebail.eu/libqt4report libqt4report.xsd">
+	<database>
+		<connection driver="QMYSQL" host="127.0.0.1" userName="test" password="" dbName="test" />
+		<query>
+			<![CDATA[SELECT code, designation FROM client ORDER BY code]]>
+		</query>
+	</database>
+	<fonts>
+		<font id="textFont1" family="Arial" pointSize="10" weight="25" italic="false"/> 
+	</fonts>
+	<body>
+		<docBody>
+			<line>
+				<item xsi:type="textFieldObject" id="code" fontId="textFont2" x="0" y="0" width="150" height="20" fieldName="code" />
+				<item xsi:type="textFieldObject" id="designation" fontId="textFont1" x="170" y="0" width="150" height="20" fieldName="designation" align="2" />
+			</line>
+		</docBody>
+		<pageFooter>
+			<line>
+				<item xsi:type="textFixedObject" id="totalDeb" fontId="textFont1" x="0" y="0" width="125" height="20" value="=Bonjour" />
+			</line>
+		</pageFooter>
+	</body>
+</document>

@@ -1,4 +1,5 @@
 //------------------------------------------------------------------------------
+#include <QApplication>
 #include <libqt4report.h>
 #include <iostream>
 //------------------------------------------------------------------------------
@@ -10,6 +11,8 @@ int main(int argc, char **argv) {
 		cout << "Usage: example file [[file] ... ]" << endl;
 		return 1;
 	}
+	
+	QApplication app(argc, argv);
 
 	for(int i=1;i<argc;i++) {	
 		QFile *xmlFile=new QFile(argv[i]);
