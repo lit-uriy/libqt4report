@@ -14,7 +14,7 @@
 	<xsd:complexType name="textObject" abstract="true">
 		<xsd:complexContent>
 			<xsd:extension base="lqr:object">
-				<xsd:attribute name="fontId" type="xsd:string" use="required" />
+				<xsd:attribute name="fontId" use="required" />
 				<xsd:attribute name="align">
 					<xsd:simpleType>
 						<xsd:restriction base="xsd:int">
@@ -75,14 +75,9 @@
 	<xsd:element name="fonts">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element ref="lqr:font" minOccurs="1" maxOccurs="unbounded" />
+				<xsd:element ref="lqr:font" minOccurs="0" maxOccurs="unbounded" />
 			</xsd:sequence>
 		</xsd:complexType>
-		
-		<xsd:key name="fontId">
-			<xsd:selector xpath="font" />
-			<xsd:field xpath="@id" />
-		</xsd:key>
 	</xsd:element>
 	
 	<xsd:element name="item" type="lqr:object" />
@@ -93,21 +88,12 @@
 				<xsd:element ref="lqr:item" minOccurs="1" maxOccurs="unbounded" />
 			</xsd:sequence>
 		</xsd:complexType>
-		
-		<xsd:keyref name="fontIdRef" refer="lqr:fontId">
-			<xsd:selector xpath="item" />
-			<xsd:field xpath="@fontId" />
-		</xsd:keyref>
 	</xsd:element>
 
 	<xsd:element name="docBody">
 		<xsd:complexType>
 			<xsd:complexContent>
-				<xsd:extension base="lqr:docBand">
-					<xsd:sequence>
-						<xsd:element ref="lqr:line" minOccurs="1" maxOccurs="unbounded" />
-					</xsd:sequence>
-				</xsd:extension>
+				<xsd:extension base="lqr:docBand" />
 			</xsd:complexContent>
 		</xsd:complexType>
 	</xsd:element>
@@ -184,10 +170,21 @@
 	<xsd:element name="document">
 		<xsd:complexType>
 			<xsd:sequence>
+				<xsd:element ref="lqr:fonts" minOccurs="0">
+				</xsd:element>
 				<xsd:element ref="lqr:database" />
-				<xsd:element ref="lqr:fonts" minOccurs="0" maxOccurs="1" />
 				<xsd:element ref="lqr:body" />
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:unique name="uniqueFontId">
+			<xsd:selector xpath="lqr:fonts/lqr:font" />
+			<xsd:field xpath="@id" />
+		</xsd:unique>
+		
+		<xsd:keyref name="uniqueFontIdRef" refer="lqr:uniqueFontId">
+			<xsd:selector xpath="lqr:document/lqr:body/lqr:*/lqr:line/lqr:item" />
+			<xsd:field xpath="@fontId" />
+		</xsd:keyref>
 	</xsd:element>
 </xsd:schema>
