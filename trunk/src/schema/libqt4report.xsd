@@ -1,94 +1,81 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<xsd:schema	xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-			
-	<xsd:attribute name="id" type="xsd:string" />
-	<xsd:attribute name="fontId" type="xsd:string" />
-	<xsd:attribute name="value" type="xsd:string" />
-	<xsd:attribute name="family" type="xsd:string" />
-	<xsd:attribute name="pointSize" type="xsd:int" />
-	<xsd:attribute name="weight">
-		<xsd:simpleType>
-			<xsd:restriction base="xsd:int">
-				<xsd:enumeration value="25" /> <!-- QFont::Light -->
-				<xsd:enumeration value="50" /> <!-- QFont::Normal-->
-				<xsd:enumeration value="63" /> <!-- QFont::DemiBold -->
-				<xsd:enumeration value="75" /> <!-- QFont::Bold -->
-				<xsd:enumeration value="87" /> <!-- QFont::Black -->
-			</xsd:restriction>
-		</xsd:simpleType>
-	</xsd:attribute>
-	<xsd:attribute name="italic" type="xsd:boolean" />
-	<xsd:attribute name="x" type="xsd:int" />
-	<xsd:attribute name="y" type="xsd:int" />
-	<xsd:attribute name="width" type="xsd:int" />
-	<xsd:attribute name="height" type="xsd:int" />
-	<xsd:attribute name="align">
-		<xsd:simpleType>
-			<xsd:restriction base="xsd:int">
-				<xsd:enumeration value="1" /> <!-- Qt::AlignLeft -->
-				<xsd:enumeration value="2" /> <!-- Qt::AlignRight -->
-				<xsd:enumeration value="4" /> <!-- Qt::AlignHCenter -->
-				<xsd:enumeration value="8" /> <!-- Qt::AlignJustify -->
-			</xsd:restriction>
-		</xsd:simpleType>
-	</xsd:attribute>
-  
+<xsd:schema	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://corentin-lebail.eu/libqt4report"
+			xmlns:lqr="http://corentin-lebail.eu/libqt4report">
+	<!-- Type -->
+	<xsd:complexType name="object" abstract="true">
+		<xsd:attribute name="id" type="xsd:string" use="required" />
+		<xsd:attribute name="x" type="xsd:int" use="required" />
+		<xsd:attribute name="y" type="xsd:int" use="required" />
+		<xsd:attribute name="width" type="xsd:int" use="required" />
+		<xsd:attribute name="height" type="xsd:int" use="required" />
+	</xsd:complexType>
+
+	<xsd:complexType name="textObject" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:object">
+				<xsd:attribute name="fontId" type="xsd:string" use="required" />
+				<xsd:attribute name="align">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:int">
+							<xsd:enumeration value="1" /> <!-- Qt::AlignLeft -->
+							<xsd:enumeration value="2" /> <!-- Qt::AlignRight -->
+							<xsd:enumeration value="4" /> <!-- Qt::AlignHCenter -->
+							<xsd:enumeration value="8" /> <!-- Qt::AlignJustify -->
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
 	
+	<xsd:complexType name="textFixedObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:textObject">
+				<xsd:attribute name="value" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="textFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:textObject">
+				<xsd:attribute name="fieldName" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="docBand" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="lqr:line" minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<!-- Elements -->
 	<xsd:element name="font">
 		<xsd:complexType>
-			<xsd:attribute ref="id" use="required" />
-			<xsd:attribute ref="family" use="required" />
-			<xsd:attribute ref="pointSize" use="required" />
-			<xsd:attribute ref="weight" use="required" />
-			<xsd:attribute ref="italic" use="required" />
-		</xsd:complexType>
-	</xsd:element>
-	
-	<xsd:element name="item" abstract="true">
-		<xsd:complexType>
-			<xsd:attribute ref="id" use="required" />
-			<xsd:attribute ref="x" use="required" />
-			<xsd:attribute ref="y" use="required" />
-			<xsd:attribute ref="width" use="required" />
-			<xsd:attribute ref="height" use="required" />
-		</xsd:complexType>
-	</xsd:element>
-
-	<xsd:element name="textItem" abstract="true">
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="item">
-					<xsd:attribute ref="fontId" use="required" />
-					<xsd:attribute ref="align" />
-				</xsd:extension>
-			</xsd:complexContent>
-		</xsd:complexType>
-	</xsd:element>
-
-	<xsd:element name="textItemFixed">
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="itemText">
-					<xsd:attribute ref="value" use="required" />
-				</xsd:extension>
-			</xsd:complexContent>
-		</xsd:complexType>
-	</xsd:element>
-	
-	<xsd:element name="textItemField">
-		<xsd:complexType>
-			<xsd:complexContent>
-				<xsd:extension base="itemText">
-					<xsd:attribute name="fieldName" use="required" />
-				</xsd:extension>
-			</xsd:complexContent>
+			<xsd:attribute name="id" type="xsd:string" use="required" />
+			<xsd:attribute name="family" type="xsd:string" use="required" />
+			<xsd:attribute name="pointSize" type="xsd:int" use="required" />
+			<xsd:attribute name="weight">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:int">
+						<xsd:enumeration value="25" /> <!-- QFont::Light -->
+						<xsd:enumeration value="50" /> <!-- QFont::Normal-->
+						<xsd:enumeration value="63" /> <!-- QFont::DemiBold -->
+						<xsd:enumeration value="75" /> <!-- QFont::Bold -->
+						<xsd:enumeration value="87" /> <!-- QFont::Black -->
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="italic" type="xsd:boolean" use="required" />
 		</xsd:complexType>
 	</xsd:element>
 	
 	<xsd:element name="fonts">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element ref="font" minOccurs="1" maxOccurs="unbounded" />
+				<xsd:element ref="lqr:font" minOccurs="1" maxOccurs="unbounded" />
 			</xsd:sequence>
 		</xsd:complexType>
 		
@@ -98,33 +85,61 @@
 		</xsd:key>
 	</xsd:element>
 	
+	<xsd:element name="item" type="lqr:object" />
+	
 	<xsd:element name="line">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element ref="item" minOccurs="1" maxOccurs="unbounded" />
+				<xsd:element ref="lqr:item" minOccurs="1" maxOccurs="unbounded" />
 			</xsd:sequence>
 		</xsd:complexType>
 		
-		<xsd:keyref name="fontIdRef" refer="fontId">
+		<xsd:keyref name="fontIdRef" refer="lqr:fontId">
 			<xsd:selector xpath="item" />
 			<xsd:field xpath="@fontId" />
 		</xsd:keyref>
 	</xsd:element>
-	
-	<xsd:complexType name="docBand">
-		<xsd:sequence>
-			<xsd:element ref="line" minOccurs="0" maxOccurs="unbounded" />
-		</xsd:sequence>
-	</xsd:complexType>
 
 	<xsd:element name="docBody">
 		<xsd:complexType>
 			<xsd:complexContent>
-				<xsd:extension base="docBand">
+				<xsd:extension base="lqr:docBand">
 					<xsd:sequence>
-						<xsd:element ref="line" minOccurs="1" maxOccurs="unbounded" />
+						<xsd:element ref="lqr:line" minOccurs="1" maxOccurs="unbounded" />
 					</xsd:sequence>
 				</xsd:extension>
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="pageHeader">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="docHeader">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="docFooter">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="pageFooter">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
 			</xsd:complexContent>
 		</xsd:complexType>
 	</xsd:element>
@@ -132,11 +147,36 @@
 	<xsd:element name="body">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element name="pageHeader" type="docBand" minOccurs="0" maxOccurs="1" />
-				<xsd:element name="docHeader" type="docBand" minOccurs="0" maxOccurs="1" />
-				<xsd:element ref="docBody" />
-				<xsd:element name="docFooter" type="docBand" minOccurs="0" maxOccurs="1" />
-				<xsd:element name="pageFooter" type="docBand" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:pageHeader" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:docHeader" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:docBody" />
+				<xsd:element ref="lqr:docFooter" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:pageFooter" minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="connection">
+		<xsd:complexType>
+			<xsd:attribute name="driver" type="xsd:string" use="required" />
+			<xsd:attribute name="host" type="xsd:string" use="required" />
+			<xsd:attribute name="userName" type="xsd:string" use="required" />
+			<xsd:attribute name="password" type="xsd:string" use="required" />
+			<xsd:attribute name="dbName" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="query">
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string"/>
+		</xsd:simpleType>
+	</xsd:element>
+	
+	<xsd:element name="database">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:connection" />
+				<xsd:element ref="lqr:query" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -144,8 +184,9 @@
 	<xsd:element name="document">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element ref="fonts" minOccurs="0" maxOccurs="1" />
-				<xsd:element ref="body" />
+				<xsd:element ref="lqr:database" />
+				<xsd:element ref="lqr:fonts" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:body" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
