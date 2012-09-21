@@ -14,7 +14,7 @@
 	<xsd:complexType name="textObject" abstract="true">
 		<xsd:complexContent>
 			<xsd:extension base="lqr:object">
-				<xsd:attribute name="fontId" use="required" />
+				<xsd:attribute name="fontId" type="xsd:string" use="required" />
 				<xsd:attribute name="align">
 					<xsd:simpleType>
 						<xsd:restriction base="xsd:int">
@@ -183,7 +183,7 @@
 		</xsd:unique>
 		
 		<xsd:keyref name="uniqueFontIdRef" refer="lqr:uniqueFontId">
-			<xsd:selector xpath="lqr:document/lqr:body/lqr:*/lqr:line/lqr:item" />
+			<xsd:selector xpath="lqr:body/*/lqr:line/lqr:item" />
 			<xsd:field xpath="@fontId" />
 		</xsd:keyref>
 	</xsd:element>

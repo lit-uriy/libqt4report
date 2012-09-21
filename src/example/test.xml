@@ -15,7 +15,7 @@
 	<body>
 		<docBody>
 			<line>
-				<item xsi:type="textFieldObject" id="code" fontId="font1vvv" x="0" y="0" width="150" height="20" fieldName="code" />
+				<item xsi:type="textFieldObject" id="code" fontId="font1" x="0" y="0" width="150" height="20" fieldName="code" />
 			</line>
 		</docBody>
 	</body>
