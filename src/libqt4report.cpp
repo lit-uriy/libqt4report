@@ -2,17 +2,20 @@
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
 #include <QAbstractMessageHandler>
+#include <QBuffer>
 #include <QtDebug>
 #include "libqt4report.h"
+#include "sch_libqt4report.cpp"
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	bool validDocument(QFile *docFile) {
 		QXmlSchema *xmlSchema=new QXmlSchema();
-		QFile *xsdFile=new QFile(":/libqt4report/schema/libqt4report.xsd");
-		xsdFile->open(QIODevice::ReadOnly);
 		bool ret=false;
 		
-		xmlSchema->load(xsdFile, QUrl::fromLocalFile(xsdFile->fileName()));
+		QBuffer buffer(&schema);
+		buffer.open(QIODevice::ReadOnly);
+		
+		xmlSchema->load(&buffer);
 		if(xmlSchema->isValid()) {
 			QXmlSchemaValidator *validator=new QXmlSchemaValidator(*xmlSchema);
 			
@@ -23,7 +26,6 @@ namespace libqt4report {
 			delete validator;
 		}
 		
-		delete xsdFile;
 		delete xmlSchema;	
 		
 		return ret;
