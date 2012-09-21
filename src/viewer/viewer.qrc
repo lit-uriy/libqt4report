@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="viewer">
+    <file>images/reload.png</file>
     <file>images/exit.png</file>
     <file>images/2rightarrow.png</file>
     <file>images/fileopen.png</file>

@@ -4,6 +4,7 @@
 //------------------------------------------------------------------------------
 #include <QMainWindow>
 #include <QFile>
+#include <QScrollArea>
 #include "ui_CMainFrm.h"
 //------------------------------------------------------------------------------
 class CMainFrm : public QMainWindow, private Ui::MainFrm {
@@ -13,9 +14,11 @@ class CMainFrm : public QMainWindow, private Ui::MainFrm {
 		~CMainFrm(void);
 	private:
 		QFile *xmlFile;
+		QScrollArea *scrollArea;
 	private slots:
 		void on_actionQuitter_triggered(bool checked=false);
 		void on_actionOuvrir_triggered(bool checked=false);
+		void on_actionRecharger_triggered(bool checked=false);
 };
 //------------------------------------------------------------------------------
 #endif // __CMAINFRM_H__
