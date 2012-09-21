@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 #include <QXmlSchema>
 #include <QXmlSchemaValidator>
+#include <QAbstractMessageHandler>
 #include <QtDebug>
 #include "libqt4report.h"
 //------------------------------------------------------------------------------
