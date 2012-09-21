@@ -25,9 +25,9 @@ libqt4report_la_DATA = $(lrelease_FILES) log4cpp.properties
 dist_libqt4report_la_DATA = $(INTERFACES) $(TRANSLATE) $(RESSOURCES) log4cpp.properties
 
 $(SCHEMA): schema/libqt4report.xsd
-	@echo -n 'static QByteArray schema("' > $@ 
-	@sed -e 's/\"/\\\"/g' -e 's/[\t]//g' $< | tr -d '\r\n' >> $@ 
-	@echo '");' >> $@
+	echo -n 'static QByteArray schema("' > $@ 
+	sed -e 's/\"/\\\"/g' -e 's/$$/\\/g' $< >> $@ 
+	echo '");' >> $@
 
 moc_%.cpp: %.h
 	$(MOC) -o $@ $<

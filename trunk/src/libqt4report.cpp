@@ -30,5 +30,9 @@ namespace libqt4report {
 		
 		return ret;
 	}
+	
+	QWidget * render(QFile *docFile) {
+		return 0;
+	}
 } //namespace
 //------------------------------------------------------------------------------

@@ -6,6 +6,7 @@
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	bool validDocument(QFile *docFile);
+	QWidget * render(QFile *docFile);
 } //namespace
 //------------------------------------------------------------------------------
 #endif //__LIBQT4REPORT_H__

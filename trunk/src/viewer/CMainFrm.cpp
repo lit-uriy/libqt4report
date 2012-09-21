@@ -11,6 +11,9 @@ CMainFrm::CMainFrm(void) : QMainWindow() {
 	setupUi(this);
 	
 	xmlFile=new QFile();
+	scrollArea=new QScrollArea(this);
+	
+	setCentralWidget(scrollArea);
 	
 	setWindowTitle("viewer - "+QString(PACKAGE_VERSION));
 }
@@ -39,13 +42,17 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 		if(xmlFile->open(QIODevice::ReadOnly)) {
 			if(!libqt4report::validDocument(xmlFile)) {
 				QMessageBox::critical(this, tr("Erreur de validation"), tr("Impossible de valider le document, êtes-vous sûre qu'il sagisse d'un document lxqr ?"));
-				
 			}else {
 				xmlFile->seek(0);
+				actionRecharger->setEnabled(true);
 			}
 		}else {
 			QMessageBox::critical(this, tr("Erreur"), tr("Impossible d'ouvrir le document"));
 		}
 	}
+}
+//--------------------------------------------------------------------------------------------------------------
+void CMainFrm::on_actionRecharger_triggered(bool) {
+	scrollArea->setWidget(libqt4report::render(xmlFile)); 
 }
 //--------------------------------------------------------------------------------------------------------------
