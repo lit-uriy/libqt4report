@@ -13,7 +13,7 @@ AC_PROG_MAKE_SET
 
 AC_CONFIG_MACRO_DIR([m4])
 
-AC_CONFIG_FILES([Makefile src/Makefile src/example/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile src/viewer/Makefile])
 
 AC_CHECK_PROG([MOC], [moc-qt4], [moc-qt4], [no])
 if test "$MOC" = no; then

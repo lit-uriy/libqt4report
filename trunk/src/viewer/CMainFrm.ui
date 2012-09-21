@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainFrm</class>
+ <widget class="QMainWindow" name="MainFrm">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>726</width>
+    <height>543</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QScrollArea" name="centralwidget">
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>726</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Fichier">
+    <property name="title">
+     <string>&amp;Fichier</string>
+    </property>
+    <addaction name="actionOuvrir"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuitter"/>
+   </widget>
+   <addaction name="menu_Fichier"/>
+  </widget>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="separator"/>
+   <addaction name="actionPremierePage"/>
+   <addaction name="actionPagePrecedente"/>
+   <addaction name="actionPageSuivante"/>
+   <addaction name="actionDernierePage"/>
+  </widget>
+  <action name="actionPremierePage">
+   <property name="icon">
+    <iconset resource="viewer.qrc">
+     <normaloff>:/viewer/images/2leftarrow.png</normaloff>:/viewer/images/2leftarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Première page</string>
+   </property>
+   <property name="toolTip">
+    <string>Première page</string>
+   </property>
+  </action>
+  <action name="actionPagePrecedente">
+   <property name="icon">
+    <iconset resource="viewer.qrc">
+     <normaloff>:/viewer/images/1leftarrow.png</normaloff>:/viewer/images/1leftarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Page précédente</string>
+   </property>
+   <property name="toolTip">
+    <string>Page précédente</string>
+   </property>
+  </action>
+  <action name="actionPageSuivante">
+   <property name="icon">
+    <iconset resource="viewer.qrc">
+     <normaloff>:/viewer/images/1rightarrow.png</normaloff>:/viewer/images/1rightarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Page suivante</string>
+   </property>
+   <property name="toolTip">
+    <string>Page suivante</string>
+   </property>
+  </action>
+  <action name="actionDernierePage">
+   <property name="icon">
+    <iconset resource="viewer.qrc">
+     <normaloff>:/viewer/images/2rightarrow.png</normaloff>:/viewer/images/2rightarrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dernière page</string>
+   </property>
+   <property name="toolTip">
+    <string>Dernière page</string>
+   </property>
+  </action>
+  <action name="actionOuvrir">
+   <property name="icon">
+    <iconset resource="viewer.qrc">
+     <normaloff>:/viewer/images/fileopen.png</normaloff>:/viewer/images/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Ouvrir</string>
+   </property>
+  </action>
+  <action name="actionQuitter">
+   <property name="icon">
+    <iconset resource="viewer.qrc">
+     <normaloff>:/viewer/images/exit.png</normaloff>:/viewer/images/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Quitter</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="viewer.qrc"/>
+ </resources>
+ <connections/>
+</ui>
