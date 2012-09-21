@@ -1,1 +1,1 @@
-SUBDIRS = src src/example
+SUBDIRS = src src/viewer
