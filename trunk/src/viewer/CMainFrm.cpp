@@ -3,6 +3,8 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
+#include <QPaintEngine>
+#include <QLabel>
 #include <config.h>
 #include <libqt4report.h>
 #include "CMainFrm.h"
@@ -12,6 +14,7 @@ CMainFrm::CMainFrm(void) : QMainWindow() {
 	
 	xmlFile=new QFile();
 	scrollArea=new QScrollArea(this);
+	scrollArea->setAlignment(Qt::AlignCenter);
 	
 	setCentralWidget(scrollArea);
 	
@@ -53,6 +56,15 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionRecharger_triggered(bool) {
-	scrollArea->setWidget(libqt4report::render(xmlFile)); 
+	QLabel *lbl=new QLabel();
+	QImage *image;
+	
+	libqt4report::render(xmlFile, &image);
+	
+	lbl->setPixmap(QPixmap::fromImage(*image));
+	
+	delete image;
+	
+	scrollArea->setWidget(lbl); 
 }
 //--------------------------------------------------------------------------------------------------------------

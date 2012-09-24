@@ -3,10 +3,12 @@
 #define __LIBQT4REPORT_H__
 //------------------------------------------------------------------------------
 #include <QFile>
+#include <QImage>
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	bool validDocument(QFile *docFile);
-	QWidget * render(QFile *docFile);
+	bool render(QFile *docFile, QImage **image);
+	QString getLastError(void);
 } //namespace
 //------------------------------------------------------------------------------
 #endif //__LIBQT4REPORT_H__
