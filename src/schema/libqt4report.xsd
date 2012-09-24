@@ -47,7 +47,7 @@
 	
 	<xsd:complexType name="docBand" abstract="true">
 		<xsd:sequence>
-			<xsd:element ref="lqr:line" minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element ref="lqr:item" minOccurs="1" maxOccurs="unbounded" />
 		</xsd:sequence>
 	</xsd:complexType>
 	
@@ -82,14 +82,6 @@
 	
 	<xsd:element name="item" type="lqr:object" />
 	
-	<xsd:element name="line">
-		<xsd:complexType>
-			<xsd:sequence>
-				<xsd:element ref="lqr:item" minOccurs="1" maxOccurs="unbounded" />
-			</xsd:sequence>
-		</xsd:complexType>
-	</xsd:element>
-
 	<xsd:element name="docBody">
 		<xsd:complexType>
 			<xsd:complexContent>
@@ -170,11 +162,47 @@
 	<xsd:element name="document">
 		<xsd:complexType>
 			<xsd:sequence>
-				<xsd:element ref="lqr:fonts" minOccurs="0">
-				</xsd:element>
+				<xsd:element ref="lqr:fonts" minOccurs="0" />
 				<xsd:element ref="lqr:database" />
 				<xsd:element ref="lqr:body" />
 			</xsd:sequence>
+			<xsd:attribute name="pageSize" use="required">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:int">
+						<xsd:enumeration value="5" /> <!-- QPrinter::A0 -->
+						<xsd:enumeration value="6" /> <!-- QPrinter::A1 -->
+						<xsd:enumeration value="7" /> <!-- QPrinter::A2 -->
+						<xsd:enumeration value="8" /> <!-- QPrinter::A3 -->
+						<xsd:enumeration value="0" /> <!-- QPrinter::A4 -->
+						<xsd:enumeration value="9" /> <!-- QPrinter::A5 --> 
+						<xsd:enumeration value="10" /> <!-- QPrinter::A6 -->
+						<xsd:enumeration value="11" /> <!-- QPrinter::A7 -->
+						<xsd:enumeration value="12" /> <!-- QPrinter::A8 -->
+						<xsd:enumeration value="13" /> <!-- QPrinter::A9 -->
+						<xsd:enumeration value="14" /> <!-- QPrinter::B0 -->
+						<xsd:enumeration value="15" /> <!-- QPrinter::B1 -->
+						<xsd:enumeration value="17" /> <!-- QPrinter::B2 -->
+						<xsd:enumeration value="18" /> <!-- QPrinter::B3 -->
+						<xsd:enumeration value="19" /> <!-- QPrinter::B4 -->
+						<xsd:enumeration value="1" /> <!-- QPrinter::B5 -->
+						<xsd:enumeration value="20" /> <!-- QPrinter::B6 -->
+						<xsd:enumeration value="21" /> <!-- QPrinter::B7-->
+						<xsd:enumeration value="22" /> <!-- QPrinter::B8 -->
+						<xsd:enumeration value="23" /> <!-- QPrinter::B9 -->
+						<xsd:enumeration value="16" /> <!-- QPrinter::B10 -->
+						<xsd:enumeration value="24" /> <!-- QPrinter::C5E -->
+						<xsd:enumeration value="25" /> <!-- QPrinter::Comm10E -->
+						<xsd:enumeration value="26" /> <!-- QPrinter::DLE -->
+						<xsd:enumeration value="4" /> <!-- QPrinter::Executive -->
+						<xsd:enumeration value="27" /> <!-- QPrinter::Folio -->
+						<xsd:enumeration value="28" /> <!-- QPrinter::Ledger -->
+						<xsd:enumeration value="3" /> <!-- QPrinter::Legal -->
+						<xsd:enumeration value="2" /> <!-- QPrinter::Letter -->
+						<xsd:enumeration value="29" /> <!-- QPrinter::Tabloid -->
+						<xsd:enumeration value="30" /> <!-- QPrinter::Custom --> 
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
 		</xsd:complexType>
 		
 		<xsd:unique name="uniqueFontId">
@@ -183,7 +211,7 @@
 		</xsd:unique>
 		
 		<xsd:keyref name="uniqueFontIdRef" refer="lqr:uniqueFontId">
-			<xsd:selector xpath="lqr:body/*/lqr:line/lqr:item" />
+			<xsd:selector xpath="lqr:body/*/lqr:item" />
 			<xsd:field xpath="@fontId" />
 		</xsd:keyref>
 	</xsd:element>
