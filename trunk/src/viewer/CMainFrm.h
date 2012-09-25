@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QFile>
 #include <QScrollArea>
+#include <CReport.h>
 #include "ui_CMainFrm.h"
 //------------------------------------------------------------------------------
 class CMainFrm : public QMainWindow, private Ui::MainFrm {
@@ -15,6 +16,7 @@ class CMainFrm : public QMainWindow, private Ui::MainFrm {
 	private:
 		QFile *xmlFile;
 		QScrollArea *scrollArea;
+		libqt4report::CReport *report;
 	private slots:
 		void on_actionQuitter_triggered(bool checked=false);
 		void on_actionOuvrir_triggered(bool checked=false);

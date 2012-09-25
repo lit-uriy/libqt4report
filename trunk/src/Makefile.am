@@ -4,15 +4,13 @@ lib_LTLIBRARIES = libqt4report.la
 
 AM_CPPFLAGS = $(QT4_CFLAGS) $(LOG4CPP_CFLAGS) -DDATADIR='"$(datarootdir)"'
 
-SCHEMA = sch_libqt4report.cpp
-
 moc_FILES =
 
 TRANSLATE =
 
 lrelease_FILES = $(patsubst %.ts,%.qm, $(TRANSLATE))
 
-libqt4report_la_SOURCES =	libqt4report.cpp libqt4report.h 
+libqt4report_la_SOURCES =	CReport.cpp CReport.h
 						
 nodist_libqt4report_la_SOURCES = $(moc_FILES)
 			
@@ -35,7 +33,7 @@ moc_%.cpp: %.h
 %.qm: %.ts
 	$(LRELEASE) $< -qm $@
 
-$(libqt4report_la_OBJECTS): $(moc_FILES) $(lrelease_FILES) $(SCHEMA)
+$(libqt4report_la_OBJECTS): $(moc_FILES) $(lrelease_FILES)
 	
 clean-qt-extra:
 	rm -f *.o
