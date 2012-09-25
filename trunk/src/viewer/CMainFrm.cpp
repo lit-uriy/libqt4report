@@ -16,6 +16,7 @@ CMainFrm::CMainFrm(void) : QMainWindow() {
 	scrollArea->setAlignment(Qt::AlignCenter);
 	
 	report=new libqt4report::CReport();
+	document=0;
 	
 	setCentralWidget(scrollArea);
 	
@@ -28,6 +29,10 @@ CMainFrm::~CMainFrm(void) {
 	}
 	delete xmlFile;
 	delete report;
+	
+	if(document != 0) {
+		delete document;
+	}
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionQuitter_triggered(bool) {
@@ -58,15 +63,20 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionRecharger_triggered(bool) {
-	QLabel *lbl=new QLabel();
-	QImage *image;
+	if(document != 0) {
+		delete document;
+	}
 	
-	report->render(xmlFile, &image);
+	if(report->process(xmlFile, &document)) {
+		libqt4report::CPage *page;
+		
+		if(document->render(0, &page)) {
+			QLabel *lbl=new QLabel();
+		
+			lbl->setPixmap(QPixmap::fromImage(page->toImage()));
 	
-	lbl->setPixmap(QPixmap::fromImage(*image));
-	
-	delete image;
-	
-	scrollArea->setWidget(lbl); 
+			scrollArea->setWidget(lbl); 
+		}
+	}
 }
 //--------------------------------------------------------------------------------------------------------------

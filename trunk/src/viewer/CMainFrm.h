@@ -17,6 +17,7 @@ class CMainFrm : public QMainWindow, private Ui::MainFrm {
 		QFile *xmlFile;
 		QScrollArea *scrollArea;
 		libqt4report::CReport *report;
+		libqt4report::CDocument *document;
 	private slots:
 		void on_actionQuitter_triggered(bool checked=false);
 		void on_actionOuvrir_triggered(bool checked=false);
