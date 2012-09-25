@@ -33,11 +33,8 @@ namespace libqt4report {
 		return ret;
 	}
 	
-	bool CReport::render(QFile *docFile, QImage **image) {
-		(*image)=new QImage(1230, 1740, QImage::Format_RGB888); //TODO Calculer la taille de l'image en fonction de l'attribut pageSize et des dpi (150 par défaut)
-		qDebug() << (*image)->depth();
-		(*image)->fill(QColor(Qt::white).rgb());
-		QPainter painter(*image);
+	bool CReport::process(QFile *docFile, CDocument **document) {
+		(*document)=new CDocument();
 		
 		return true;
 	}

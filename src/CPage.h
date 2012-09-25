@@ -1,18 +1,19 @@
 //------------------------------------------------------------------------------
-#ifndef __CREPORT_H__
-#define __CREPORT_H__
+#ifndef __CPAGE_H__
+#define __CPAGE_H__
 //------------------------------------------------------------------------------
-#include <QFile>
-#include "CDocument.h"
+#include <QImage>
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	class CReport {
+	class CPage {
 		public:
-			bool validDocument(QFile *docFile);
-			bool process(QFile *docFile, CDocument **document);
+			CPage(int pageWidth, int pageHeight);
+			QImage toImage(void) const;
 			QString getLastError(void);
+		private:
+			int pageWidth, pageHeight;
 	};
 } //namespace
 //------------------------------------------------------------------------------
-#endif //__CREPORT_H__
+#endif //__CPAGE_H__
 //------------------------------------------------------------------------------

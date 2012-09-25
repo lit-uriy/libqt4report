@@ -10,7 +10,9 @@ TRANSLATE =
 
 lrelease_FILES = $(patsubst %.ts,%.qm, $(TRANSLATE))
 
-libqt4report_la_SOURCES =	CReport.cpp CReport.h
+libqt4report_la_SOURCES =	CReport.cpp CReport.h \
+				CDocument.cpp CDocumennt.h \
+				CPage.cpp CPage.h
 						
 nodist_libqt4report_la_SOURCES = $(moc_FILES)
 			
