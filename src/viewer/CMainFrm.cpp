@@ -6,7 +6,6 @@
 #include <QPaintEngine>
 #include <QLabel>
 #include <config.h>
-#include <libqt4report.h>
 #include "CMainFrm.h"
 //--------------------------------------------------------------------------------------------------------------
 CMainFrm::CMainFrm(void) : QMainWindow() {
@@ -15,6 +14,8 @@ CMainFrm::CMainFrm(void) : QMainWindow() {
 	xmlFile=new QFile();
 	scrollArea=new QScrollArea(this);
 	scrollArea->setAlignment(Qt::AlignCenter);
+	
+	report=new libqt4report::CReport();
 	
 	setCentralWidget(scrollArea);
 	
@@ -26,6 +27,7 @@ CMainFrm::~CMainFrm(void) {
 		xmlFile->close();
 	}
 	delete xmlFile;
+	delete report;
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionQuitter_triggered(bool) {
@@ -43,7 +45,7 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 		xmlFile->setFileName(fileName);
 		
 		if(xmlFile->open(QIODevice::ReadOnly)) {
-			if(!libqt4report::validDocument(xmlFile)) {
+			if(!report->validDocument(xmlFile)) {
 				QMessageBox::critical(this, tr("Erreur de validation"), tr("Impossible de valider le document, êtes-vous sûre qu'il sagisse d'un document lxqr ?"));
 			}else {
 				xmlFile->seek(0);
@@ -59,7 +61,7 @@ void CMainFrm::on_actionRecharger_triggered(bool) {
 	QLabel *lbl=new QLabel();
 	QImage *image;
 	
-	libqt4report::render(xmlFile, &image);
+	report->render(xmlFile, &image);
 	
 	lbl->setPixmap(QPixmap::fromImage(*image));
 	

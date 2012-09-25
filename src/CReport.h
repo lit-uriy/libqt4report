@@ -1,15 +1,18 @@
 //------------------------------------------------------------------------------
-#ifndef __LIBQT4REPORT_H__
-#define __LIBQT4REPORT_H__
+#ifndef __CREPORT_H__
+#define __CREPORT_H__
 //------------------------------------------------------------------------------
 #include <QFile>
 #include <QImage>
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	bool validDocument(QFile *docFile);
-	bool render(QFile *docFile, QImage **image);
-	QString getLastError(void);
+	class CReport {
+		public:
+			bool validDocument(QFile *docFile);
+			bool render(QFile *docFile, QImage **image);
+			QString getLastError(void);
+	};
 } //namespace
 //------------------------------------------------------------------------------
-#endif //__LIBQT4REPORT_H__
+#endif //__CREPORT_H__
 //------------------------------------------------------------------------------
