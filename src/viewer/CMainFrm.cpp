@@ -83,7 +83,7 @@ void CMainFrm::on_actionRecharger_triggered(bool) {
 		if(document->render(0, &page)) {
 			QSvgWidget *svgWidget=new QSvgWidget();
 		
-			svgWidget->load(page->toSVG());
+			svgWidget->load(page->toSVG().toUtf8());
 	
 			scrollArea->setWidget(svgWidget); 
 		}
