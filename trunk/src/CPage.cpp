@@ -14,9 +14,8 @@ namespace libqt4report {
 		this->pageHeight=pageHeight;
 	}
 	
-	QByteArray CPage::toSVG(void) const {
+	QString CPage::toSVG(void) {
 		int w=pageWidth*COEF, h=pageHeight*COEF;
-		QByteArray ba;
 		QString svg="<?xml version='1.0' encoding='utf-8'?>\
 		<svg xmlns='http://www.w3.org/2000/svg' version='1.2' \
 		baseProfile='tiny' width='"+QString::number(w)+"' \
@@ -26,9 +25,7 @@ namespace libqt4report {
 		
 		svg+="</svg>";
 		
-		qDebug() << svg;
-		
-		return svg.toUtf8();;
+		return svg;
 	}
 	
 	QString CPage::getLastError(void) {

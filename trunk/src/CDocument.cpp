@@ -4,7 +4,7 @@
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	int CDocument::getNbPage(void) {
-		return 0;
+		return 1;
 	}
 	
 	bool CDocument::render(int pageNo, CPage **page) {
