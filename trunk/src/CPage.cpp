@@ -14,13 +14,21 @@ namespace libqt4report {
 		this->pageHeight=pageHeight;
 	}
 	
-	QImage CPage::toImage(void) const {
-		QImage image(pageWidth*COEF, pageHeight*COEF, QImage::Format_RGB888); 
+	QByteArray CPage::toSVG(void) const {
+		int w=pageWidth*COEF, h=pageHeight*COEF;
+		QByteArray ba;
+		QString svg="<?xml version='1.0' encoding='utf-8'?>\
+		<svg xmlns='http://www.w3.org/2000/svg' version='1.2' \
+		baseProfile='tiny' width='"+QString::number(w)+"' \
+		height='"+QString::number(h)+"'>";
 		
-		image.fill(QColor(Qt::white).rgb());
-		QPainter painter(&image);
+		svg+="<rect x='0' y='0' width='"+QString::number(w)+"' height='"+QString::number(h)+"' fill='white' stroke='none' />";
 		
-		return image;
+		svg+="</svg>";
+		
+		qDebug() << svg;
+		
+		return svg.toUtf8();;
 	}
 	
 	QString CPage::getLastError(void) {
