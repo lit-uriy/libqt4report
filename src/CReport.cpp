@@ -13,7 +13,7 @@ namespace libqt4report {
 		QXmlSchema *xmlSchema=new QXmlSchema();
 		bool ret=false;
 		
-		QByteArray data((const char *)schema_libqt4report_xsd);
+		QByteArray data((const char *)schema_libqt4report_xsd, schema_libqt4report_xsd_size-1);
 		QBuffer buffer(&data);
 		buffer.open(QIODevice::ReadOnly);
 		

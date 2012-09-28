@@ -11,17 +11,20 @@
 class CMainFrm : public QMainWindow, private Ui::MainFrm {
 	Q_OBJECT
 	public:
-		CMainFrm(void);
+		CMainFrm(QString fileName=QString());
 		~CMainFrm(void);
 	private:
 		QFile *xmlFile;
 		QScrollArea *scrollArea;
 		libqt4report::CReport *report;
 		libqt4report::CDocument *document;
+		
+		void loadFile(QString fileName);
 	private slots:
 		void on_actionQuitter_triggered(bool checked=false);
 		void on_actionOuvrir_triggered(bool checked=false);
 		void on_actionRecharger_triggered(bool checked=false);
+		void on_actionFermer_triggered(bool checked=false);
 };
 //------------------------------------------------------------------------------
 #endif // __CMAINFRM_H__

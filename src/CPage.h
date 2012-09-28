@@ -8,7 +8,7 @@ namespace libqt4report {
 	class CPage {
 		public:
 			CPage(int pageWidth, int pageHeight);
-			QImage toImage(void) const;
+			QByteArray toSVG(void) const;
 			QString getLastError(void);
 		private:
 			int pageWidth, pageHeight;

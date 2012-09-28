@@ -10,6 +10,7 @@
 int main(int argc, char **argv) {
 	QTranslator translator;
 	int ret;
+	QString fileName;
 	QApplication app(argc, argv);
 	
 	QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));
@@ -22,7 +23,11 @@ int main(int argc, char **argv) {
 	app.setApplicationName("viewer");
 	app.setApplicationVersion(PACKAGE_VERSION);
 	
-	CMainFrm *mainFrm=new CMainFrm();
+	if(argc > 1) {
+		fileName=argv[1];
+	}
+	
+	CMainFrm *mainFrm=new CMainFrm(fileName);
 	mainFrm->showMaximized();
 
 	ret=app.exec();
