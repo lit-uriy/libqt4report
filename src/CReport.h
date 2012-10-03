@@ -8,9 +8,12 @@
 namespace libqt4report {
 	class CReport {
 		public:
+			CReport(void);
 			bool validDocument(QFile *docFile);
 			bool process(QFile *docFile, CDocument **document);
-			QString getLastError(void);
+			QString getLastError(void) { return lastError; }
+		private:
+			QString lastError;
 	};
 } //namespace
 //------------------------------------------------------------------------------

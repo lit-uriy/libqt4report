@@ -9,13 +9,12 @@
 	</fonts>
 	<database>
 		<connection driver="QMYSQL" host="127.0.0.1" userName="test" password="" dbName="test" />
-		<query>
-			<![CDATA[SELECT code, designation FROM client ORDER BY code]]>
-		</query>
+		<query><![CDATA[SELECT code, nom FROM client ORDER BY code]]></query>
 	</database>
 	<body>
 		<docBody>
-			<item xsi:type="textFieldObject" id="code" fontId="font1" x="0" y="0" width="150" height="20" fieldName="code" />
+			<item xsi:type="textFieldObject" id="code" fontId="font1" x="0" y="0" width="20" height="20" fieldName="code" />
+			<item xsi:type="textFieldObject" id="code" fontId="font1" x="25" y="0" width="50" height="20" fieldName="nom" />
 		</docBody>
 	</body>
 </document>

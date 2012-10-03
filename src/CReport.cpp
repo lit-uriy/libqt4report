@@ -3,12 +3,20 @@
 #include <QXmlSchemaValidator>
 #include <QAbstractMessageHandler>
 #include <QBuffer>
-#include <QPainter>
+#include <QXmlSimpleReader>
+#include <QXmlInputSource>
 #include <QtDebug>
+#include <log4cpp/Category.hh>
+#include <log4cpp/PropertyConfigurator.hh>
 #include "CReport.h"
+#include "CDocumentParser.h"
 #include "sch_libqt4report.cpp"
 //------------------------------------------------------------------------------
 namespace libqt4report {
+	CReport::CReport(void) {
+		log4cpp::PropertyConfigurator::configure("log4cpp.properties");
+	}
+	
 	bool CReport::validDocument(QFile *docFile) {
 		QXmlSchema *xmlSchema=new QXmlSchema();
 		bool ret=false;
@@ -34,13 +42,28 @@ namespace libqt4report {
 	}
 	
 	bool CReport::process(QFile *docFile, CDocument **document) {
-		(*document)=new CDocument();
+		QXmlSimpleReader xmlReader;
+		QXmlInputSource *source = new QXmlInputSource(docFile);
+		CDocumentParser *parser=new CDocumentParser();
+		bool ret=false;
 		
-		return true;
-	}
-	
-	QString CReport::getLastError(void) {
-		return "";
+		xmlReader.setContentHandler(parser);
+		if(xmlReader.parse(source)) {
+			(*document)=parser->getDocument();;
+			
+			if((*document)->process()) {
+				ret=true;
+			}else {
+				lastError=(*document)->getLastError();
+			}
+		}else {
+			lastError="Unable to parse the file";
+		}
+		
+		delete parser;
+		delete source;
+		
+		return ret;
 	}
 } //namespace
 //------------------------------------------------------------------------------
