@@ -86,7 +86,11 @@ void CMainFrm::on_actionRecharger_triggered(bool) {
 			svgWidget->load(page->toSVG().toUtf8());
 	
 			scrollArea->setWidget(svgWidget); 
+		}else {
+			qDebug() << document->getLastError();
 		}
+	}else {
+		qDebug() << report->getLastError();
 	}
 }
 //--------------------------------------------------------------------------------------------------------------
