@@ -11,9 +11,11 @@ TRANSLATE =
 lrelease_FILES = $(patsubst %.ts,%.qm, $(TRANSLATE))
 
 libqt4report_la_SOURCES =	CReport.cpp CReport.h \
-				CDocument.cpp CDocumennt.h \
-				CPage.cpp CPage.h \
-				CDocumentParser.cpp CDocumentParser.h
+				CDocument.cpp CDocument.h \
+				CDocumentParser.cpp CDocumentParser.h \
+				CPrintableObject.h \
+				CDocBand.cpp CDocBand.h \
+				CItem.cpp CItem.h
 						
 nodist_libqt4report_la_SOURCES = $(moc_FILES)
 			
@@ -40,6 +42,7 @@ $(libqt4report_la_OBJECTS): $(moc_FILES) $(lrelease_FILES)
 	
 clean-qt-extra:
 	rm -f *.o
+	rm -f *.lo
 	rm -f moc_*.cpp
 	rm -f *.qm
 	rm -f $(SCHEMA)

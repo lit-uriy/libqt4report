@@ -12,9 +12,16 @@
 		<query><![CDATA[SELECT code, nom FROM client ORDER BY code]]></query>
 	</database>
 	<body>
+		<docHeader>
+			<item xsi:type="textFixedObject" id="codeTitle" fontId="font2" x="0" y="30" width="20" height="20" value="code" />
+			<item xsi:type="textFixedObject" id="nomTitle" fontId="font2" x="25" y="30" width="50" height="20" value="nom" />
+		</docHeader>
 		<docBody>
-			<item xsi:type="textFieldObject" id="code" fontId="font1" x="0" y="0" width="20" height="20" fieldName="code" />
-			<item xsi:type="textFieldObject" id="code" fontId="font1" x="25" y="0" width="50" height="20" fieldName="nom" />
+			<item xsi:type="textFieldObject" id="code" fontId="font1" x="0" y="30" width="20" height="20" fieldName="code" />
+			<item xsi:type="textFieldObject" id="nom" fontId="font1" x="25" y="30" width="50" height="20" fieldName="nom" />
 		</docBody>
+		<docFooter>
+			<item xsi:type="textFixedObject" id="fin" fontId="font1" x="25" y="30" width="100" height="20" value="Fin" />
+		</docFooter>
 	</body>
 </document>

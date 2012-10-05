@@ -1,19 +1,16 @@
 //------------------------------------------------------------------------------
-#ifndef __CPAGE_H__
-#define __CPAGE_H__
+#ifndef __CPRINTABLEOBJECT_H__
+#define __CPRINTABLEOBJECT_H__
 //------------------------------------------------------------------------------
-#include <QImage>
+#include <QSqlRecord>
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	class CPage {
+	class CPrintableObject {
 		public:
-			CPage(int pageWidth, int pageHeight);
-			QString toSVG(void);
-			QString getLastError(void);
-		private:
-			int pageWidth, pageHeight;
+			virtual ~CPrintableObject(void) {}
+			virtual QString toSvg(QSqlRecord *record, int y) = 0;
 	};
 } //namespace
 //------------------------------------------------------------------------------
-#endif //__CPAGE_H__
+#endif //__CPRINTABLEOBJECT_H__
 //------------------------------------------------------------------------------

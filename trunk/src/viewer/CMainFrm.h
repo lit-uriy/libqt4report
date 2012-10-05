@@ -17,7 +17,6 @@ class CMainFrm : public QMainWindow, private Ui::MainFrm {
 		QFile *xmlFile;
 		QScrollArea *scrollArea;
 		libqt4report::CReport *report;
-		libqt4report::CDocument *document;
 		
 		void loadFile(QString fileName);
 	private slots:

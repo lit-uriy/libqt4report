@@ -175,6 +175,11 @@
 			<xsd:field xpath="@id" />
 		</xsd:unique>
 		
+		<xsd:unique name="uniqueItemId">
+			<xsd:selector xpath="lqr:body/*/lqr:item" />
+			<xsd:field xpath="@id" />
+		</xsd:unique>
+		
 		<xsd:keyref name="uniqueFontIdRef" refer="lqr:uniqueFontId">
 			<xsd:selector xpath="lqr:body/*/lqr:item" />
 			<xsd:field xpath="@fontId" />
