@@ -1,23 +1,19 @@
 //------------------------------------------------------------------------------
-#ifndef __CREPORT_H__
-#define __CREPORT_H__
+#ifndef __CDOCBAND_H__
+#define __CDOCBAND_H__
 //------------------------------------------------------------------------------
-#include <QFile>
+#include <QHash>
+#include <QSqlRecord>
+#include "CPrintableObject.h"
+#include "CItem.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	class CReport {
+	class CDocBand : public CPrintableObject, public QHash<QString, CItem *> {
 		public:
-			CReport(void);
-			~CReport(void);
-			bool validDocument(QFile *docFile);
-			bool process(QFile *docFile);
-			int getNbPage(void);
-			QString toSvg(int pageIdx);
-			QString getLastError(void) { return lastError; }
-		private:
-			QString lastError;
+			QString toSvg(QSqlRecord *record, int y);
+			int getHeight(void);
 	};
 } //namespace
 //------------------------------------------------------------------------------
-#endif //__CREPORT_H__
+#endif //__CDOCBAND_H__
 //------------------------------------------------------------------------------

@@ -10,13 +10,24 @@
 #include <log4cpp/PropertyConfigurator.hh>
 #include "CReport.h"
 #include "CDocumentParser.h"
+#include "CDocument.h"
 #include "sch_libqt4report.cpp"
 //------------------------------------------------------------------------------
 namespace libqt4report {
+	//------------------------------------------------------------------------------
+	static CDocument * document;
+	//------------------------------------------------------------------------------
 	CReport::CReport(void) {
 		log4cpp::PropertyConfigurator::configure("log4cpp.properties");
+		document=0;
 	}
-	
+	//------------------------------------------------------------------------------
+	CReport::~CReport(void) {
+		if(document != 0) {
+			delete document;
+		}
+	}
+	//------------------------------------------------------------------------------
 	bool CReport::validDocument(QFile *docFile) {
 		QXmlSchema *xmlSchema=new QXmlSchema();
 		bool ret=false;
@@ -40,8 +51,8 @@ namespace libqt4report {
 		
 		return ret;
 	}
-	
-	bool CReport::process(QFile *docFile, CDocument **document) {
+	//------------------------------------------------------------------------------
+	bool CReport::process(QFile *docFile) {
 		QXmlSimpleReader xmlReader;
 		QXmlInputSource *source = new QXmlInputSource(docFile);
 		CDocumentParser *parser=new CDocumentParser();
@@ -49,12 +60,12 @@ namespace libqt4report {
 		
 		xmlReader.setContentHandler(parser);
 		if(xmlReader.parse(source)) {
-			(*document)=parser->getDocument();;
+			document=parser->getDocument();;
 			
-			if((*document)->process()) {
+			if(document->process()) {
 				ret=true;
 			}else {
-				lastError=(*document)->getLastError();
+				lastError=document->getLastError();
 			}
 		}else {
 			lastError="Unable to parse the file";
@@ -65,5 +76,20 @@ namespace libqt4report {
 		
 		return ret;
 	}
+	//------------------------------------------------------------------------------
+	int CReport::getNbPage(void) {
+		if(document != 0) {
+			return document->getNbPage();
+		}
+		return 0;
+	}
+	//------------------------------------------------------------------------------
+	QString CReport::toSvg(int pageIdx) {
+		if(document != 0 && pageIdx >= 0 && pageIdx < document->getNbPage()) {
+			return document->toSvg(pageIdx);
+		}
+		return "";
+	}
+	//------------------------------------------------------------------------------
 } //namespace
 //------------------------------------------------------------------------------

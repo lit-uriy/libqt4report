@@ -16,7 +16,6 @@ CMainFrm::CMainFrm(QString fileName) : QMainWindow() {
 	scrollArea->setAlignment(Qt::AlignCenter);
 	
 	report=new libqt4report::CReport();
-	document=0;
 	
 	setCentralWidget(scrollArea);
 	
@@ -33,10 +32,6 @@ CMainFrm::~CMainFrm(void) {
 	}
 	delete xmlFile;
 	delete report;
-	
-	if(document != 0) {
-		delete document;
-	}
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::loadFile(QString fileName) {
@@ -73,22 +68,12 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionRecharger_triggered(bool) {	
-	if(document != 0) {
-		delete document;
-	}
-	
-	if(report->process(xmlFile, &document)) {
-		libqt4report::CPage *page;
+	if(report->process(xmlFile)) {
+		QSvgWidget *svgWidget=new QSvgWidget();
 		
-		if(document->render(0, &page)) {
-			QSvgWidget *svgWidget=new QSvgWidget();
-		
-			svgWidget->load(page->toSVG().toUtf8());
+		svgWidget->load(report->toSvg(0).toUtf8());
 	
-			scrollArea->setWidget(svgWidget); 
-		}else {
-			qDebug() << document->getLastError();
-		}
+		scrollArea->setWidget(svgWidget); 
 	}else {
 		qDebug() << report->getLastError();
 	}

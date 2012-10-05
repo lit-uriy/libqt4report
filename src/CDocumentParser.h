@@ -4,10 +4,12 @@
 //------------------------------------------------------------------------------
 #include <QXmlDefaultHandler>
 #include "CDocument.h"
+#include "CItem.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	class CDocumentParser : public QXmlDefaultHandler {
 		public:
+			CDocumentParser(void);
 			bool startDocument(void);
 			bool endDocument(void);
 			bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts);
@@ -15,10 +17,15 @@ namespace libqt4report {
 			bool characters(const QString& ch);
 			CDocument *getDocument(void) { return document; }
 		private:
+			enum EDBType { edbtNone, edbtPageHeader, edbtDocHeader, edbtDocBody, edbtDocFooter, edbtPageFooter };
 			CDocument *document;
 			bool inFonts;
 			bool inDatabase;
 			bool inQuery;
+			bool inBody;
+			EDBType curDocBand;
+			
+			libqt4report::CItem * parseItem(const QXmlAttributes& atts);
 	};
 } //namespace
 //------------------------------------------------------------------------------
