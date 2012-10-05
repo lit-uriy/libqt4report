@@ -219,6 +219,8 @@ namespace libqt4report {
 		if(inQuery) {
 			document->setQuery(ch);
 		}
+		
+		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	CItem * CDocumentParser::parseItem(const QXmlAttributes& atts) {
