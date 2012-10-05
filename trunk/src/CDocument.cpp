@@ -61,8 +61,9 @@ namespace libqt4report {
 	void CDocument::createPages(QSqlQuery *query) {
 		int w=pageWidth*COEF, h=pageHeight*COEF;
 		int y;
-		int pageIdx=0;
+		int pageIdx;
 		int heightFooter=0;
+		int reste;
 		bool lastPage=false;
 
 		QString svg="<?xml version='1.0' encoding='utf-8'?>\
@@ -76,7 +77,7 @@ namespace libqt4report {
 			heightFooter=pageFooter->getHeight();
 		}
 		
-		y=0;
+		y=pageIdx=0;
 		while(query->next()) {
 			QSqlRecord record=query->record();
 			
@@ -90,19 +91,29 @@ namespace libqt4report {
 					svg+=docHeader->toSvg(&record, y);
 					y+=docHeader->getHeight();
 				}
+				
+				reste=h-y;
 			}
 			
-			svg+=docBody->toSvg(&record, y);
-			y+=docBody->getHeight();
-			
-			if(lastPage && docFooter != 0) {
-				svg+=docFooter->toSvg(&record, y);
-				y+=docFooter->getHeight();
+			if(reste >= docBody->getHeight() + heightFooter) {
+				svg+=docBody->toSvg(&record, y);
+				y+=docBody->getHeight();
+				
+				reste=h-y;
+			}else {
+				y=0;
 			}
 			
-			if(pageFooter != 0) {
-				svg+=pageFooter->toSvg(&record, y);
-				y+=pageFooter->getHeight();
+			if(query->last()) {
+				if(lastPage && docFooter != 0) {
+					svg+=docFooter->toSvg(&record, y);
+					y+=docFooter->getHeight();
+				}
+			
+				if(pageFooter != 0) {
+					svg+=pageFooter->toSvg(&record, y);
+					y+=pageFooter->getHeight();
+				}
 			}
 		}
 		
