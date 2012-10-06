@@ -44,7 +44,8 @@ namespace libqt4report {
 			QStringList pages;
 			int pageWidth, pageHeight;
 			
-			void createPages(QSqlQuery *query);
+			void createPages(QSqlQuery * query);
+			void processBand(QSqlRecord * record);
 	};
 } //namespace
 //------------------------------------------------------------------------------

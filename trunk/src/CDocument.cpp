@@ -61,67 +61,77 @@ namespace libqt4report {
 	void CDocument::createPages(QSqlQuery *query) {
 		int w=pageWidth*COEF, h=pageHeight*COEF;
 		int y;
-		int pageIdx;
-		int heightFooter=0;
-		int reste;
-		bool lastPage=false;
-
-		QString svg="<?xml version='1.0' encoding='utf-8'?>\
-		<svg xmlns='http://www.w3.org/2000/svg' version='1.2' \
-		baseProfile='tiny' width='"+QString::number(w)+"' \
-		height='"+QString::number(h)+"'>";
+		int hPageHeader, hDocHeader, hDocBody, hDocFooter, hPageFooter;
+		bool fini=(query->size() != 0);
+		bool nouvellePage=true, finPage=false;
+		QString svg;
 		
-		svg+="<rect x='0' y='0' width='"+QString::number(w)+"' height='"+QString::number(h)+"' fill='white' stroke='none' />";
+		if(pageHeader != 0) {
+			hPageHeader=pageHeader->getHeight();
+		}
+		
+		if(docHeader != 0) {
+			hDocHeader=docHeader->getHeight();
+		}
+		
+		hDocBody=docBody->getHeight();
+		
+		if(docFooter != 0) {
+			hDocFooter=docFooter->getHeight();
+		}
 		
 		if(pageFooter != 0) {
-			heightFooter=pageFooter->getHeight();
+			hPageFooter=pageFooter->getHeight();
 		}
 		
-		y=pageIdx=0;
-		while(query->next()) {
+		while(!fini) {
 			QSqlRecord record=query->record();
+			processBand(&record);
 			
-			if(y == 0) {
+			if(nouvellePage) {
+				svg="<?xml version='1.0' encoding='utf-8'?>";
+				svg+="<svg xmlns='http://www.w3.org/2000/svg' version='1.2' ";
+				svg+="baseProfile='tiny' width='"+QString::number(w)+"' ";
+				svg+="height='"+QString::number(h)+"'>";
+				svg+="<rect x='0' y='0' width='"+QString::number(w)+"' height='"+QString::number(h)+"' fill='white' stroke='none' />";
+			
+				y=0;
+				
 				if(pageHeader != 0) {
 					svg+=pageHeader->toSvg(&record, y);
-					y+=pageHeader->getHeight();
 				}
 				
-				if(pageIdx == 0 && docHeader != 0) {
+				if(query->first() && docHeader != 0) {
 					svg+=docHeader->toSvg(&record, y);
-					y+=docHeader->getHeight();
 				}
 				
-				reste=h-y;
+				nouvellePage=false;
 			}
 			
-			if(reste >= docBody->getHeight() + heightFooter) {
-				svg+=docBody->toSvg(&record, y);
-				y+=docBody->getHeight();
+			if(finPage) {
+				if(query->last()) {
+					if(docFooter != 0) {
+						svg+=docFooter->toSvg(&record, y);
+					}
+				}else {
+					nouvellePage=true;
+				}
 				
-				reste=h-y;
-			}else {
-				y=0;
-			}
-			
-			if(query->last()) {
-				if(lastPage && docFooter != 0) {
+				if(pageHeader != 0) {
 					svg+=docFooter->toSvg(&record, y);
-					y+=docFooter->getHeight();
 				}
-			
-				if(pageFooter != 0) {
-					svg+=pageFooter->toSvg(&record, y);
-					y+=pageFooter->getHeight();
-				}
+				
+				svg+="</svg>";
+		
+				qDebug() << svg;
+		
+				pages.append(svg);
 			}
 		}
 		
-		svg+="</svg>";
-		
-		qDebug() << svg;
-		
-		pages.append(svg);
+	}
+	//------------------------------------------------------------------------------
+	void CDocument::processBand(QSqlRecord * record) {
 	}
 	//------------------------------------------------------------------------------
 }
