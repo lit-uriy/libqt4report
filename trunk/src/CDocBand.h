@@ -10,8 +10,10 @@
 namespace libqt4report {
 	class CDocBand : public CPrintableObject, public QHash<QString, CItem *> {
 		public:
-			QString toSvg(QSqlRecord *record, int y);
+			QString toSvg(int &y);
 			int getHeight(void);
+		private:
+			int height;
 	};
 } //namespace
 //------------------------------------------------------------------------------

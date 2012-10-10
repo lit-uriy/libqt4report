@@ -3,8 +3,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
-#include <QPaintEngine>
-#include <QSvgWidget>
+#include <QPaintEngine>>
 #include <config.h>
 #include "CMainFrm.h"
 //--------------------------------------------------------------------------------------------------------------
@@ -55,6 +54,12 @@ void CMainFrm::loadFile(QString fileName) {
 	}
 }
 //--------------------------------------------------------------------------------------------------------------
+void CMainFrm::showPage() {
+	svgWidget->load(report->toSvg(curPage).toUtf8());
+
+	scrollArea->setWidget(svgWidget); 
+}
+//--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionQuitter_triggered(bool) {
 	close();
 }
@@ -69,11 +74,9 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionRecharger_triggered(bool) {	
 	if(report->process(xmlFile)) {
-		QSvgWidget *svgWidget=new QSvgWidget();
-		
-		svgWidget->load(report->toSvg(0).toUtf8());
-	
-		scrollArea->setWidget(svgWidget); 
+		nbPage=report->getNbPage();
+		svgWidget=new QSvgWidget();
+		on_actionPremierePage_triggered();
 	}else {
 		qDebug() << report->getLastError();
 	}
@@ -86,7 +89,31 @@ void CMainFrm::on_actionFermer_triggered(bool) {
 	
 	Ui_MainFrm::statusBar->clearMessage();
 	actionRecharger->setEnabled(false);
-	delete scrollArea->widget(); 
+	delete svgWidget; 
 	scrollArea->setWidget(0); 
+}
+//--------------------------------------------------------------------------------------------------------------
+void CMainFrm::on_actionPremierePage_triggered(bool) {
+	curPage=0;
+	showPage();
+}
+//--------------------------------------------------------------------------------------------------------------
+void CMainFrm::on_actionPagePrecedente_triggered(bool) {
+	if(curPage > 0) {
+		curPage--;
+		showPage();
+	}
+}
+//--------------------------------------------------------------------------------------------------------------
+void CMainFrm::on_actionPageSuivante_triggered(bool) {
+	if(curPage < nbPage-1) {
+		curPage++;
+		showPage();
+	}
+}
+//--------------------------------------------------------------------------------------------------------------
+void CMainFrm::on_actionDernierePage_triggered(bool) {
+	curPage=nbPage-1;
+	showPage();
 }
 //--------------------------------------------------------------------------------------------------------------

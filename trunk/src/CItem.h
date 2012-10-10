@@ -19,20 +19,20 @@ namespace libqt4report {
 	class CItemText : public CItem {
 		public:
 			virtual ~CItemText(void) {}
-			QString toSvg(QSqlRecord *record, int y);
+			QString toSvg(int &y);
 			int getHeight(void) { return attributes.value("y").toInt(); }
 		protected:
-			virtual QString getValue(QSqlRecord *record) = 0;
+			virtual QString getValue(void) = 0;
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFixedObject : public CItemText {
 		protected:
-			QString getValue(QSqlRecord *record) { return attributes.value("value"); }
+			QString getValue(void) { return attributes.value("value"); }
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFieldObject : public CItemText {
 		protected:
-			QString getValue(QSqlRecord *record);
+			QString getValue(void);
 	};
 } //namespace
 //------------------------------------------------------------------------------

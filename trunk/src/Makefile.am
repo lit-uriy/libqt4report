@@ -15,7 +15,9 @@ libqt4report_la_SOURCES =	CReport.cpp CReport.h \
 				CDocumentParser.cpp CDocumentParser.h \
 				CPrintableObject.h \
 				CDocBand.cpp CDocBand.h \
-				CItem.cpp CItem.h
+				CItem.cpp CItem.h \
+				CField.cpp CField.h \
+				CFields.cpp CFields.h
 						
 nodist_libqt4report_la_SOURCES = $(moc_FILES)
 			
