@@ -20,12 +20,14 @@ namespace libqt4report {
 			enum EDBType { edbtNone, edbtPageHeader, edbtDocHeader, edbtDocBody, edbtDocFooter, edbtPageFooter };
 			CDocument *document;
 			bool inFonts;
+			bool inFields;
 			bool inDatabase;
 			bool inQuery;
 			bool inBody;
 			EDBType curDocBand;
 			
 			libqt4report::CItem * parseItem(const QXmlAttributes& atts);
+			libqt4report::CField * parseField(const QXmlAttributes& atts);
 	};
 } //namespace
 //------------------------------------------------------------------------------

@@ -3,6 +3,18 @@
 			targetNamespace="http://corentin-lebail.eu/libqt4report"
 			xmlns:lqr="http://corentin-lebail.eu/libqt4report">
 	<!-- Type -->
+	<xsd:complexType name="fieldObject" abstract="true">
+		<xsd:attribute name="id" type="xsd:string" use="required" />
+	</xsd:complexType>
+	
+	<xsd:complexType name="dbFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:fieldObject">
+				<xsd:attribute name="fieldName" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
 	<xsd:complexType name="object" abstract="true">
 		<xsd:attribute name="id" type="xsd:string" use="required" />
 		<xsd:attribute name="x" type="xsd:int" use="required" />
@@ -40,7 +52,7 @@
 	<xsd:complexType name="textFieldObject">
 		<xsd:complexContent>
 			<xsd:extension base="lqr:textObject">
-				<xsd:attribute name="fieldName" type="xsd:string" use="required" />
+				<xsd:attribute name="fieldId" type="xsd:string" use="required" />
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -76,6 +88,16 @@
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element ref="lqr:font" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="field" type="lqr:fieldObject" />
+	
+	<xsd:element name="fields">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:field" maxOccurs="unbounded" />
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -163,6 +185,7 @@
 		<xsd:complexType>
 			<xsd:sequence>
 				<xsd:element ref="lqr:fonts" minOccurs="0" />
+				<xsd:element ref="lqr:fields" />
 				<xsd:element ref="lqr:database" />
 				<xsd:element ref="lqr:body" />
 			</xsd:sequence>
@@ -175,6 +198,11 @@
 			<xsd:field xpath="@id" />
 		</xsd:unique>
 		
+		<xsd:unique name="uniqueFieldId">
+			<xsd:selector xpath="lqr:fields/lqr:field" />
+			<xsd:field xpath="@id" />
+		</xsd:unique>
+		
 		<xsd:unique name="uniqueItemId">
 			<xsd:selector xpath="lqr:body/*/lqr:item" />
 			<xsd:field xpath="@id" />
@@ -183,6 +211,11 @@
 		<xsd:keyref name="uniqueFontIdRef" refer="lqr:uniqueFontId">
 			<xsd:selector xpath="lqr:body/*/lqr:item" />
 			<xsd:field xpath="@fontId" />
+		</xsd:keyref>
+		
+		<xsd:keyref name="uniqueFieldIdRef" refer="lqr:uniqueFieldId">
+			<xsd:selector xpath="lqr:body/*/lqr:item" />
+			<xsd:field xpath="@fieldId" />
 		</xsd:keyref>
 	</xsd:element>
 </xsd:schema>

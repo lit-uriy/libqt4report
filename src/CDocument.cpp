@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------
 #define DPI				100
 #define INCH			25.6
-#define COEF			((double)DPI/INCH)
+#define COEF			1//((double)DPI/INCH)
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	CDocument::CDocument(int pageWidth, int pageHeight) {
@@ -84,12 +84,15 @@ namespace libqt4report {
 		idxRec=0;
 		fini=(lastRec == -1);
 		
-		query->next();
 		while(!fini) {
+			query->next();
+			idxRec++;
 			QSqlRecord record=query->record();
-			processBand(&record);
+			
+			processFields(&record);
 			
 			if(nouvellePage) {
+				qDebug() << "nouvelle page";
 				svg="<?xml version='1.0' encoding='utf-8'?>";
 				svg+="<svg xmlns='http://www.w3.org/2000/svg' version='1.2' ";
 				svg+="baseProfile='tiny' width='"+QString::number(w)+"' ";
@@ -99,55 +102,51 @@ namespace libqt4report {
 				y=0;
 				
 				if(pageHeader != 0) {
-					svg+=pageHeader->toSvg(&record, y);
+					svg+=pageHeader->toSvg(y);
 				}
 				
-				if(query->first() && docHeader != 0) {
-					svg+=docHeader->toSvg(&record, y);
+				if(idxRec == 0 && docHeader != 0) {
+					svg+=docHeader->toSvg(y);
 				}
 				
 				nouvellePage=false;
 			}
 			
-			svg+=docBody->toSvg(&record, y);
+			svg+=docBody->toSvg(y);
 			
 			hFooter=hPageFooter + (idxRec == lastRec-1 ? hDocFooter : 0);
 			
-			if(idxRec == lastRec) {
-				finPage=true;
-			}
-			if(h - y - hFooter >= 0) {
-				query->next();
-				idxRec++;
-			}else {
+			qDebug() << idxRec << lastRec << hPageFooter;
+			
+			if(idxRec == lastRec || h - y - hFooter < 0) {
 				finPage=true;
 			}
 			
 			if(finPage) {
+				qDebug() << "fin de page";
 				if(idxRec == lastRec) {
 					if(docFooter != 0) {
-						svg+=docFooter->toSvg(&record, y);
+						svg+=docFooter->toSvg(y);
 					}
 					fini=true;
 				}else {
 					nouvellePage=true;
 				}
 				
-				if(pageHeader != 0) {
-					svg+=docFooter->toSvg(&record, y);
+				if(pageFooter != 0) {
+					svg+=pageFooter->toSvg(y);
 				}
 				
 				svg+="</svg>";
-		
+				
 				qDebug() << svg;
 		
 				pages.append(svg);
+				
+				finPage=false;
 			}
 		}
 		
-	}
-	//------------------------------------------------------------------------------
-	void CDocument::processBand(QSqlRecord * record) {
 	}
 	//------------------------------------------------------------------------------
 }

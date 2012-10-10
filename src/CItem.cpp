@@ -2,25 +2,25 @@
 #include <QtDebug>
 #include <QVariant>
 #include "CItem.h"
+#include "CFields.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	QString CItemText::toSvg(QSqlRecord *record, int y) {
+	QString CItemText::toSvg(int &y) {
 		return QString("<text x='%1' y='%2' width='%3' height='%4'>%5</text>")
 			.arg(attributes.value("x").toInt())
 			.arg(attributes.value("y").toInt()+y)
 			.arg(attributes.value("width").toInt())
 			.arg(attributes.value("height").toInt())
-			.arg(getValue(record));
+			.arg(getValue());
 	}
 	//------------------------------------------------------------------------------
-	QString CItemTextFieldObject::getValue(QSqlRecord *record) {
-		QString ret="";
+	QString CItemTextFieldObject::getValue(void) {
+		QString fieldId=attributes.value("fieldId");
+		CField *field=CFields::getInstance()->getField(fieldId);
 		
-		if(record != 0) {
-			ret=record->value(attributes.value("fieldName")).toString();
-		}
+		qDebug() << "fieldId" << fieldId << "field" << field;
 		
-		return ret;
+		return field->getValue();
 	}
 }//namespace
 //------------------------------------------------------------------------------

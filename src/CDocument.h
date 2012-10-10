@@ -8,6 +8,7 @@
 #include <QSqlQuery>
 #include <QStringList>
 #include "CDocBand.h"
+#include "CFields.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	class CDocument {
@@ -45,7 +46,7 @@ namespace libqt4report {
 			int pageWidth, pageHeight;
 			
 			void createPages(QSqlQuery * query);
-			void processBand(QSqlRecord * record);
+			void processFields(QSqlRecord *record) { CFields::getInstance()->process(record); }
 	};
 } //namespace
 //------------------------------------------------------------------------------

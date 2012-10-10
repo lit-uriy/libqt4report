@@ -4,6 +4,7 @@
 #include <QMetaType>
 #include <log4cpp/Category.hh>
 #include "CDocumentParser.h"
+#include "CFields.h"
 //--------------------------------------------------------------------------------------------------------------
 namespace libqt4report {
 	static log4cpp::Category& logger = log4cpp::Category::getInstance("CDocumentParser");
@@ -11,11 +12,12 @@ namespace libqt4report {
 	CDocumentParser::CDocumentParser(void) {
 		qRegisterMetaType<CItemTextFixedObject>("CItemTextFixedObject");
 		qRegisterMetaType<CItemTextFieldObject>("CItemTextFieldObject");
+		qRegisterMetaType<CDbFieldObject>("CDbFieldObject");
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::startDocument(void) {
 		document=0;
-		inFonts=inDatabase=inQuery=inBody=false;
+		inFonts=inFields=inDatabase=inQuery=inBody=false;
 		curDocBand=edbtNone;
 		
 		return true;
@@ -47,6 +49,12 @@ namespace libqt4report {
 		if(qName == "fonts") {
 			qDebug()  << "Parse fonts element";
 			inFonts=true;
+			return true;
+		}
+		
+		if(qName == "fields") {
+			qDebug()  << "Parse fields element";
+			inFields=true;
 			return true;
 		}
 		
@@ -84,6 +92,16 @@ namespace libqt4report {
 			
 			qDebug()  << "Add font" << id << "to collection";
 			document->addFont(id, new QFont(family, pointSize, weight, italic));
+			
+			return true;
+		}
+		
+		if(qName == "field" && inFields) {
+			CField *field=parseField(atts);
+			QString id=field->getAttribute("id");
+			
+			qDebug()  << "Add field" << id << "to collection";
+			CFields::getInstance()->addField(id, field);
 			
 			return true;
 		}
@@ -188,6 +206,12 @@ namespace libqt4report {
 			return true;
 		}
 		
+		if(qName == "fields") {
+			qDebug()  << "End parse fields element";
+			inFields=false;
+			return true;
+		}
+		
 		if(qName == "database") {
 			qDebug()  << "End parse database element";
 			inDatabase=false;
@@ -249,6 +273,34 @@ namespace libqt4report {
 		
 		
 		return item;
+	}
+	//--------------------------------------------------------------------------------------------------------------
+	CField * CDocumentParser::parseField(const QXmlAttributes& atts) {
+		int i;
+		QString className;
+		CField * field=0;
+		
+		for(i=0;i<atts.count();i++) {
+			if(atts.localName(i) == "type") {
+				className="C"+atts.value(i).left(1).toUpper()+atts.value(i).mid(1);
+				
+				int id=QMetaType::type(className.toUtf8().data());
+				
+				qDebug() << className << id;
+				
+				if(id != 0) {
+					field=static_cast<CField *>(QMetaType::construct(id));
+				}
+			}else {
+				if(field != 0) {
+					field->setAttribute(atts.localName(i), atts.value(i));
+				}
+			}
+		}
+		
+		
+		
+		return field;
 	}
 	//--------------------------------------------------------------------------------------------------------------
 }
