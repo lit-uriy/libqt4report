@@ -16,6 +16,7 @@ namespace libqt4report {
 			bool endElement(const QString& namespaceURI, const QString& localName, const QString& qName);
 			bool characters(const QString& ch);
 			CDocument *getDocument(void) { return document; }
+			QString errorString(void) { return lastError; }
 		private:
 			enum EDBType { edbtNone, edbtPageHeader, edbtDocHeader, edbtDocBody, edbtDocFooter, edbtPageFooter };
 			CDocument *document;
@@ -24,7 +25,11 @@ namespace libqt4report {
 			bool inDatabase;
 			bool inQuery;
 			bool inBody;
+			bool inField;
+			bool inFieldExpression;
 			EDBType curDocBand;
+			CField *curField;
+			QString lastError;
 			
 			libqt4report::CItem * parseItem(const QXmlAttributes& atts);
 			libqt4report::CField * parseField(const QXmlAttributes& atts);

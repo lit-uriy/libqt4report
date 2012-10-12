@@ -7,10 +7,17 @@
 		<font id="font1" family="arial" size="10" />
 		<font id="fontColumnName" family="arial" size="14" />
 		<font id="fontTitre" family="arial" size="40" weight="bold" />
+		<font id="fontTotalTitre" family="arial" size="10" weight="bold" />
 	</fonts>
 	<fields>
 		<field xsi:type="dbFieldObject" id="dbArticle" fieldName="article" />
 		<field xsi:type="dbFieldObject" id="dbQte" fieldName="quantite" />
+		<field xsi:type="dbFieldObject" id="dbPuHT" fieldName="prixUnitaireHT" />
+		<field xsi:type="dbFieldObject" id="dbTTva" fieldName="tauxTva" />
+		<field xsi:type="calculatedFieldObject" id="cMntHT">
+			<expression><![CDATA[${dbPuHT}*${dbQte}]]></expression>
+		</field>
+		<field xsi:type="totalFieldObject" id="tTotalHT" operation="sum" fieldId="cMntHT" />
 	</fields>
 	<database>
 		<connection driver="QMYSQL" host="127.0.0.1" userName="test" password="" dbName="test" />
@@ -20,6 +27,9 @@
 		<pageHeader>
 			<item xsi:type="textFixedObject" id="codeTitle" fontId="fontColumnName" x="5" y="5" value="Article" />
 			<item xsi:type="textFixedObject" id="nomTitle" fontId="fontColumnName" x="50" y="5" value="Quantité" align="end" />
+			<item xsi:type="textFixedObject" id="puHTTitle" fontId="fontColumnName" x="100" y="5" value="Prix unitaire HT" align="end" />
+			<item xsi:type="textFixedObject" id="tTvaTitle" fontId="fontColumnName" x="130" y="5" value="Taux de tva" align="end" />
+			<item xsi:type="textFixedObject" id="mntHTTitel" fontId="fontColumnName" x="170" y="5" value="Montant HT" align="end" />
 			<item xsi:type="lineObject" id="lineH1" x="5" y="6" width="200" height="0" />
 		</pageHeader>
 		<docHeader>
@@ -28,9 +38,13 @@
 		<docBody>
 			<item xsi:type="textFieldObject" id="code" fontId="font1" x="5" y="5" fieldId="dbArticle" />
 			<item xsi:type="textFieldObject" id="nom" fontId="font1" x="50" y="5" fieldId="dbQte" align="end" />
+			<item xsi:type="textFieldObject" id="puHt" fontId="font1" x="100" y="5" fieldId="dbPuHT" align="end" />
+			<item xsi:type="textFieldObject" id="tTva" fontId="font1" x="130" y="5" fieldId="dbTTva" align="end" />
+			<item xsi:type="textFieldObject" id="tMntHT" fontId="font1" x="170" y="5" fieldId="cMntHT" align="end" />
 		</docBody>
 		<docFooter>
-			<item xsi:type="textFixedObject" id="fin" fontId="font1" x="5" y="5" value="Fin" />
+			<item xsi:type="textFixedObject" id="totalTitle" fontId="fontTotalTitre" x="145" y="5" value="Total :" align="end" />
+			<item xsi:type="textFieldObject" id="total" fontId="font1" x="170" y="5" fieldId="tTotalHT"  align="end" />
 		</docFooter>
 		<pageFooter>
 			<item xsi:type="rectObject" id="rectFooter" x="2" y="2" width="206" height="5" color="green" /> 

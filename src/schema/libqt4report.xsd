@@ -2,15 +2,56 @@
 <xsd:schema	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://corentin-lebail.eu/libqt4report"
 			xmlns:lqr="http://corentin-lebail.eu/libqt4report">
-	<!-- Type -->
+			
 	<xsd:complexType name="fieldObject" abstract="true">
-		<xsd:attribute name="id" type="xsd:string" use="required" />
+		<xsd:attribute name="id" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="[a-zA-Z0-9]*" /> 
+				</xsd:restriction>
+			</xsd:simpleType>	
+		</xsd:attribute>
 	</xsd:complexType>
 	
 	<xsd:complexType name="dbFieldObject">
 		<xsd:complexContent>
 			<xsd:extension base="lqr:fieldObject">
 				<xsd:attribute name="fieldName" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:element name="expression">
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string"/>
+		</xsd:simpleType>
+	</xsd:element>
+	
+	<xsd:complexType name="calculatedFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:fieldObject">
+				<xsd:sequence>
+					<xsd:element ref="lqr:expression" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="totalFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:fieldObject">
+				<xsd:attribute name="operation" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="sum" />
+							<xsd:enumeration value="avg" />
+							<xsd:enumeration value="count" />
+							<xsd:enumeration value="min" />
+							<xsd:enumeration value="max" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="fieldId" type="xsd:string" use="required" />
 			</xsd:extension>
 		</xsd:complexContent>
 	</xsd:complexType>
@@ -76,7 +117,6 @@
 		</xsd:sequence>
 	</xsd:complexType>
 	
-	<!-- Elements -->
 	<xsd:element name="font">
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:string" use="required" />
@@ -131,6 +171,16 @@
 				<xsd:element ref="lqr:field" maxOccurs="unbounded" />
 			</xsd:sequence>
 		</xsd:complexType>
+		
+		<xsd:key name="keyFieldId">
+			<xsd:selector xpath="lqr:field" />
+			<xsd:field xpath="@id" />
+		</xsd:key>
+		
+		<xsd:keyref name="keyFieldIdRef" refer="lqr:keyFieldId">
+			<xsd:selector xpath="lqr:field" />
+			<xsd:field xpath="@fieldId" />
+		</xsd:keyref>
 	</xsd:element>
 	
 	<xsd:element name="item" type="lqr:object" />
