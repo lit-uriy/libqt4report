@@ -74,7 +74,7 @@ namespace libqt4report {
 				value=fValue;
 				firstTime=false;
 			}
-		}else if(operation == "count") {
+		}else if(operation == "max") {
 			if(fValue > value) {
 				value=fValue;
 			}
