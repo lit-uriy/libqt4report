@@ -17,8 +17,6 @@ namespace libqt4report {
 			int getNbPage(void);
 			QString toSvg(int pageIdx);
 			QString getLastError(void) { return lastError; }
-			void addFont(QString id, QFont *font) { fonts->insert(id, font); }
-			QFont *getFont(QString id) { return fonts->value(id); }
 			void setDatabaseInfos(QString driver, QString host, QString userName, QString password, QString dbName);
 			void setQuery(QString sqlQuery) { this->sqlQuery=sqlQuery.trimmed(); }
 			bool process(void);
@@ -33,7 +31,6 @@ namespace libqt4report {
 			CDocBand * getDocFooter(void) { return docFooter; }
 			CDocBand * getPageFooter(void) { return pageFooter; }
 		private:
-			QHash<QString, QFont *> *fonts;
 			CDocBand *pageHeader;
 			CDocBand *docHeader;
 			CDocBand *docBody;

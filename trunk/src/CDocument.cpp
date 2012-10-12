@@ -4,14 +4,8 @@
 #include <QSqlQuery>
 #include "CDocument.h"
 //------------------------------------------------------------------------------
-#define DPI				100
-#define INCH			25.6
-#define COEF			1//((double)DPI/INCH)
-//------------------------------------------------------------------------------
 namespace libqt4report {
 	CDocument::CDocument(int pageWidth, int pageHeight) {
-		fonts=new QHash<QString, QFont *>();
-		
 		pageHeader=docHeader=docBody=docFooter=pageFooter=0;
 		
 		this->pageWidth=pageWidth;
@@ -59,7 +53,7 @@ namespace libqt4report {
 	}
 	//------------------------------------------------------------------------------
 	void CDocument::createPages(QSqlQuery *query) {
-		int w=pageWidth*COEF, h=pageHeight*COEF;
+		int w=pageWidth*CPrintableObject::getCoef(), h=pageHeight*CPrintableObject::getCoef();
 		int y;
 		int hDocBody, hDocFooter=0, hPageFooter=0;
 		int hFooter;
@@ -86,7 +80,6 @@ namespace libqt4report {
 		
 		while(!fini) {
 			query->next();
-			idxRec++;
 			QSqlRecord record=query->record();
 			
 			processFields(&record);
@@ -116,9 +109,7 @@ namespace libqt4report {
 			
 			hFooter=hPageFooter + (idxRec == lastRec-1 ? hDocFooter : 0);
 			
-			qDebug() << idxRec << lastRec << hPageFooter;
-			
-			if(idxRec == lastRec || h - y - hFooter < 0) {
+			if(idxRec == lastRec || h - y - hFooter - hDocBody < 0) {
 				finPage=true;
 			}
 			
@@ -139,12 +130,14 @@ namespace libqt4report {
 				
 				svg+="</svg>";
 				
-				qDebug() << svg;
-		
 				pages.append(svg);
+				
+				qDebug() << svg;
 				
 				finPage=false;
 			}
+			
+			idxRec++;
 		}
 		
 	}
