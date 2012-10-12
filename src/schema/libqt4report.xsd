@@ -19,8 +19,7 @@
 		<xsd:attribute name="id" type="xsd:string" use="required" />
 		<xsd:attribute name="x" type="xsd:int" use="required" />
 		<xsd:attribute name="y" type="xsd:int" use="required" />
-		<xsd:attribute name="width" type="xsd:int" use="required" />
-		<xsd:attribute name="height" type="xsd:int" use="required" />
+		<xsd:attribute name="color" type="xsd:string" />
 	</xsd:complexType>
 
 	<xsd:complexType name="textObject" abstract="true">
@@ -29,15 +28,29 @@
 				<xsd:attribute name="fontId" type="xsd:string" use="required" />
 				<xsd:attribute name="align">
 					<xsd:simpleType>
-						<xsd:restriction base="xsd:int">
-							<xsd:enumeration value="1" /> <!-- Qt::AlignLeft -->
-							<xsd:enumeration value="2" /> <!-- Qt::AlignRight -->
-							<xsd:enumeration value="4" /> <!-- Qt::AlignHCenter -->
-							<xsd:enumeration value="8" /> <!-- Qt::AlignJustify -->
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="start" />
+							<xsd:enumeration value="end" />
+							<xsd:enumeration value="middle" />
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:attribute>
 			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="lineObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:object">
+				<xsd:attribute name="width" type="xsd:int" use="required" />
+				<xsd:attribute name="height" type="xsd:int" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="rectObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:lineObject" />
 		</xsd:complexContent>
 	</xsd:complexType>
 	
@@ -68,19 +81,37 @@
 		<xsd:complexType>
 			<xsd:attribute name="id" type="xsd:string" use="required" />
 			<xsd:attribute name="family" type="xsd:string" use="required" />
-			<xsd:attribute name="pointSize" type="xsd:int" use="required" />
-			<xsd:attribute name="weight">
+			<xsd:attribute name="size" type="xsd:int" use="required" />
+			<xsd:attribute name="weight" default="normal">
 				<xsd:simpleType>
-					<xsd:restriction base="xsd:int">
-						<xsd:enumeration value="25" /> <!-- QFont::Light -->
-						<xsd:enumeration value="50" /> <!-- QFont::Normal-->
-						<xsd:enumeration value="63" /> <!-- QFont::DemiBold -->
-						<xsd:enumeration value="75" /> <!-- QFont::Bold -->
-						<xsd:enumeration value="87" /> <!-- QFont::Black -->
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="normal" />
+						<xsd:enumeration value="bold" />
+						<xsd:enumeration value="bolder" /> 
+						<xsd:enumeration value="lighter" />
+						<xsd:enumeration value="100" />
+						<xsd:enumeration value="200" />
+						<xsd:enumeration value="300" />
+						<xsd:enumeration value="400" />
+						<xsd:enumeration value="500" />
+						<xsd:enumeration value="600" />
+						<xsd:enumeration value="700" />
+						<xsd:enumeration value="800" />
+						<xsd:enumeration value="900" />
+						<xsd:enumeration value="inherit" />
 					</xsd:restriction>
 				</xsd:simpleType>
 			</xsd:attribute>
-			<xsd:attribute name="italic" type="xsd:boolean" use="required" />
+			<xsd:attribute name="style" default="normal">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="normal" />
+						<xsd:enumeration value="italic" />
+						<xsd:enumeration value="oblique" /> 
+						<xsd:enumeration value="inherit" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
 		</xsd:complexType>
 	</xsd:element>
 	

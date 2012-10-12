@@ -20,7 +20,7 @@ namespace libqt4report {
 		public:
 			virtual ~CItemText(void) {}
 			QString toSvg(int &y);
-			int getHeight(void) { return attributes.value("y").toInt(); }
+			int getHeight(void) { return (int)(attributes.value("y").toDouble()*CPrintableObject::getCoef()); }
 		protected:
 			virtual QString getValue(void) = 0;
 	};
@@ -33,6 +33,17 @@ namespace libqt4report {
 	class CItemTextFieldObject : public CItemText {
 		protected:
 			QString getValue(void);
+	};
+	//------------------------------------------------------------------------------
+	class CItemLineObject : public CItem {
+		public:
+			QString toSvg(int &y);
+			int getHeight(void);
+	};
+	//------------------------------------------------------------------------------
+	class CItemRectObject : public CItemLineObject {
+		public:
+			QString toSvg(int &y);
 	};
 } //namespace
 //------------------------------------------------------------------------------

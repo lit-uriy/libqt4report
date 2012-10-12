@@ -5,6 +5,7 @@
 #include <log4cpp/Category.hh>
 #include "CDocumentParser.h"
 #include "CFields.h"
+#include "CFonts.h"
 //--------------------------------------------------------------------------------------------------------------
 namespace libqt4report {
 	static log4cpp::Category& logger = log4cpp::Category::getInstance("CDocumentParser");
@@ -13,6 +14,8 @@ namespace libqt4report {
 		qRegisterMetaType<CItemTextFixedObject>("CItemTextFixedObject");
 		qRegisterMetaType<CItemTextFieldObject>("CItemTextFieldObject");
 		qRegisterMetaType<CDbFieldObject>("CDbFieldObject");
+		qRegisterMetaType<CItemLineObject>("CItemLineObject");
+		qRegisterMetaType<CItemRectObject>("CItemRectObject");
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::startDocument(void) {
@@ -72,26 +75,33 @@ namespace libqt4report {
 		
 		if(qName == "font" && inFonts) {
 			QString id, family;
-			int pointSize, weight;
-			bool italic;
-			QFont *f;
+			int size;
+			QString weight, style;
+			CFont *font;
 			
 			for(i=0;i<atts.count();i++) {
 				if(atts.localName(i) == "id") {
 					id=atts.value(i);
 				}else if(atts.localName(i) == "family") {
 					family=atts.value(i);
-				}else if(atts.localName(i) == "pointSize") {
-					pointSize=atts.value(i).toInt();
+				}else if(atts.localName(i) == "size") {
+					size=atts.value(i).toInt();
 				}else if(atts.localName(i) == "weight") {
-					weight=atts.value(i).toInt();
-				}else if(atts.localName(i) == "italic") {
-					italic=(bool)atts.value(i).toInt();
+					weight=atts.value(i);
+				}else if(atts.localName(i) == "style") {
+					style=atts.value(i);
 				}
+			}
+			font=new CFont(family, size);
+			if(!weight.isEmpty()) {
+				font->setWeight(weight);
+			}
+			if(!style.isEmpty()) {
+				font->setStyle(style);
 			}
 			
 			qDebug()  << "Add font" << id << "to collection";
-			document->addFont(id, new QFont(family, pointSize, weight, italic));
+			CFonts::getInstance()->addFont(id, font);
 			
 			return true;
 		}
