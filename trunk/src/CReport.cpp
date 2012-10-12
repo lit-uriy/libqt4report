@@ -68,7 +68,7 @@ namespace libqt4report {
 				lastError=document->getLastError();
 			}
 		}else {
-			lastError="Unable to parse the file";
+			lastError="Unable to parse the file : "+parser->errorString();
 		}
 		
 		delete parser;

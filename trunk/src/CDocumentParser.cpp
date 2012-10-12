@@ -16,11 +16,13 @@ namespace libqt4report {
 		qRegisterMetaType<CDbFieldObject>("CDbFieldObject");
 		qRegisterMetaType<CItemLineObject>("CItemLineObject");
 		qRegisterMetaType<CItemRectObject>("CItemRectObject");
+		qRegisterMetaType<CCalculatedFieldObject>("CCalculatedFieldObject");
+		qRegisterMetaType<CTotalFieldObject>("CTotalFieldObject");
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::startDocument(void) {
 		document=0;
-		inFonts=inFields=inDatabase=inQuery=inBody=false;
+		inFonts=inFields=inDatabase=inQuery=inBody=inField=false;
 		curDocBand=edbtNone;
 		
 		return true;
@@ -113,6 +115,15 @@ namespace libqt4report {
 			qDebug()  << "Add field" << id << "to collection";
 			CFields::getInstance()->addField(id, field);
 			
+			curField=field;
+			
+			inField=true;
+			
+			return true;
+		}
+		
+		if(qName == "expression" && curField != 0 && inField) {
+			inFieldExpression=true;
 			return true;
 		}
 		
@@ -219,6 +230,10 @@ namespace libqt4report {
 		if(qName == "fields") {
 			qDebug()  << "End parse fields element";
 			inFields=false;
+			if(!CFields::getInstance()->sort()) {
+				lastError=CFields::getInstance()->getSortError();
+				return false;
+			}
 			return true;
 		}
 		
@@ -246,12 +261,32 @@ namespace libqt4report {
 			return true;
 		}
 		
+		if(qName == "field" && inFields) {
+			curField=0;
+			inField=false;
+			return true;
+		}
+		
+		if(qName == "expression" && curField != 0 && inField) {
+			inFieldExpression=false;
+			return true;
+		}
+		
 		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::characters(const QString& ch) {
 		if(inQuery) {
 			document->setQuery(ch);
+			return true;
+		}
+		
+		if(inFieldExpression && curField != 0) {
+			CCalculatedFieldObject *cfo=static_cast<CCalculatedFieldObject *>(curField);
+			if(cfo != 0) {
+				cfo->setExpression(ch);
+			}
+			return true;
 		}
 		
 		return true;
