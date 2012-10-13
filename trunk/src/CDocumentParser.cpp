@@ -230,8 +230,8 @@ namespace libqt4report {
 		if(qName == "fields") {
 			qDebug()  << "End parse fields element";
 			inFields=false;
-			if(!CFields::getInstance()->sort()) {
-				lastError=CFields::getInstance()->getSortError();
+			if(!CFields::getInstance()->processDepends()) {
+				lastError=CFields::getInstance()->getDependsError();
 				return false;
 			}
 			return true;
@@ -284,7 +284,12 @@ namespace libqt4report {
 		if(inFieldExpression && curField != 0) {
 			CCalculatedFieldObject *cfo=static_cast<CCalculatedFieldObject *>(curField);
 			if(cfo != 0) {
-				cfo->setExpression(ch);
+				try {
+					cfo->setExpression(ch);
+				}catch(QString *e) {
+					lastError=*e;
+					return false;
+				}
 			}
 			return true;
 		}

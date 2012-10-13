@@ -13,16 +13,24 @@ namespace libqt4report {
 			CField * getField(QString key);
 			void addField(QString key, CField *field);
 			void process(QSqlRecord *record);
-			bool sort(void);
-			QString getSortError(void) { return sortError; }
+			QString getDependsError(void) { return dependsError; }
+			bool processDepends(void);
 			static CFields * getInstance(void);
 		private:
 			static CFields *instance;
 			QList<CField *> *map;
 			QHash<QString, int> *keyMap;
-			QString sortError;
+			QString dependsError;
 			
 			CFields(void);
+			void resetPoids(void);
+			void calculPoids(QString fieldIdRef, CField *field);
+			void quickSort(int premier, int dernier);
+			int partitionner(int premier, int dernier, int pivot);
+			void swap(CField *f1, CField *f2);
+			
+			void printMap(void);
+			void printKeyMap(void);
 	};
 } //namespace
 //------------------------------------------------------------------------------
