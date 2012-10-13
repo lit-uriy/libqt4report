@@ -14,18 +14,19 @@ namespace libqt4report {
 			QString getAttribute(QString name) { return attributes.value(name); }
 			virtual void process(QSqlRecord *record) = 0;
 			virtual QString getValue(void) = 0;
-			virtual bool isCalculatedField(void) = 0;
-			virtual bool isDepend(CField *other) { return false; }
-			int compareTo(CField *other);
+			void resetPoid(void) { poid=0; }
+			void decPoid(void) { poid--; }
+			int getPoid(void) { return poid; }
+			virtual const QList<CField *> getDepends(void) { return QList<CField *>(); }
 		protected:
 			QHash<QString ,QString> attributes;
+			int poid;
 	};
 	//------------------------------------------------------------------------------
 	class CDbFieldObject : public CField {
 		public:
 			void process(QSqlRecord *record);
 			QString getValue(void) { return value; }
-			bool isCalculatedField(void) { return false; }
 		private:
 			QString value;
 	};
@@ -36,13 +37,11 @@ namespace libqt4report {
 			QString getValue(void) { return value; }
 			void setExpression(QString expression);
 			QString getExpression(void) { return expression; }
-			bool isCalculatedField(void) { return true; }
-			bool isDepend(CField *other);
+			const QList<CField *> getDepends(void) { return depends; }
 		private:
 			QString value;
 			QString expression;
-			
-			QStringList depends;
+			QList<CField *> depends;
 	};
 	//------------------------------------------------------------------------------
 	class CTotalFieldObject : public CField {
@@ -50,8 +49,7 @@ namespace libqt4report {
 			CTotalFieldObject(void) { value=0; firstTime=true; sum=0; nb=0; }
 			void process(QSqlRecord *record);
 			QString getValue(void) { return QString::number(value); }
-			bool isCalculatedField(void) { return true; }
-			bool isDepend(CField *other);
+			const QList<CField *> getDepends(void);
 		private:
 			double value;
 			double sum;

@@ -14,10 +14,10 @@
 		<field xsi:type="dbFieldObject" id="dbQte" fieldName="quantite" />
 		<field xsi:type="dbFieldObject" id="dbPuHT" fieldName="prixUnitaireHT" />
 		<field xsi:type="dbFieldObject" id="dbTTva" fieldName="tauxTva" />
+		<field xsi:type="totalFieldObject" id="tTotalHT" operation="sum" fieldId="cMntHT" />
 		<field xsi:type="calculatedFieldObject" id="cMntHT">
 			<expression><![CDATA[${dbPuHT}*${dbQte}]]></expression>
 		</field>
-		<field xsi:type="totalFieldObject" id="tTotalHT" operation="sum" fieldId="cMntHT" />
 	</fields>
 	<database>
 		<connection driver="QMYSQL" host="127.0.0.1" userName="test" password="" dbName="test" />

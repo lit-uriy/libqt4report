@@ -6,32 +6,10 @@
 #include "CFields.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	int CField::compareTo(CField *other) {
-		if(!isCalculatedField() && !other->isCalculatedField()) {
-			return attributes.value("id").compare(other->getAttribute("id"));
-		}
-		
-		return (isDepend(other) ? 1 : -1);
-	}
-	//------------------------------------------------------------------------------
 	void CDbFieldObject::process(QSqlRecord *record) {
 		QString fieldName=getAttribute("fieldName");
 
 		value=record->value(fieldName).toString();
-	}
-	//------------------------------------------------------------------------------
-	bool CCalculatedFieldObject::isDepend(CField *other) {
-		int i;
-		
-		for(i=0;i<depends.size();i++) {
-			QString depend=depends.at(i);
-			CField *field=CFields::getInstance()->getField(depend);
-			if(depend->getAttribute("id") == other->getAttribute("id")) {
-				return true;
-			}
-		}
-		
-		return false;
 	}
 	//------------------------------------------------------------------------------
 	void CCalculatedFieldObject::process(QSqlRecord *record) {
@@ -39,10 +17,9 @@ namespace libqt4report {
 		
 		value=expression;
 		for(i=0;i<depends.size();i++) {
-			QString depend=depends.at(i);
-			CField *field=CFields::getInstance()->getField(depend);
+			CField *field=depends.at(i);
 			
-			value.replace("${"+depend+"}", field->getValue());
+			value.replace("${"+field->getAttribute("id")+"}", field->getValue());
 		}
 	}
 	//------------------------------------------------------------------------------
@@ -51,8 +28,15 @@ namespace libqt4report {
 		QRegExp regExp("\\$\\{([a-zA-Z0-9]*)\\}");
 		int pos = 0;
 		while ((pos = regExp.indexIn(expression, pos)) != -1) {
+			QString fieldId=regExp.cap(1);
 			pos += regExp.matchedLength();
-			depends  << regExp.cap(1);
+			CField *field=CFields::getInstance()->getField(fieldId);
+			
+			if(field == 0) {
+				throw new QString("Field "+fieldId+" not exists !");
+				return;
+			}
+			depends << field;
 		}
 	}
 	//------------------------------------------------------------------------------
@@ -81,8 +65,13 @@ namespace libqt4report {
 		}
 	}
 	//------------------------------------------------------------------------------
-	bool CTotalFieldObject::isDepend(CField *other) {
-		return other->getAttribute("id") == getAttribute("fieldId");
+	const QList<CField *> CTotalFieldObject::getDepends(void) {
+		QList<CField *> depend;
+		CField *field=CFields::getInstance()->getField(getAttribute("fieldId"));
+		
+		depend << field;
+		
+		return depend;
 	}
 	//------------------------------------------------------------------------------
 }//namespace
