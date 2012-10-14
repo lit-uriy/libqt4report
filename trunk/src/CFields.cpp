@@ -47,13 +47,7 @@ namespace libqt4report {
 			return false;
 		}
 		
-		printMap();
-		
 		quickSort(0, map->size()-1);
-		
-		qDebug() << "";
-		
-		printMap();
 		
 		return true;
 	}
