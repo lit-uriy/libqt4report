@@ -45,7 +45,13 @@ namespace libqt4report {
 			return false;
 		}
 		
-		createPages(&query);
+		try {
+			createPages(&query);
+		}catch(QString *e) {
+			lastError=*e;
+			
+			return false;
+		}
 		
 		database.close();
 		

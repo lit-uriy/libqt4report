@@ -44,7 +44,7 @@ if test "$MOC" = no; then
 	AC_MSG_ERROR([moc not found! Make sure you have Qt-devel-tools installed!])
 fi
 
-PKG_CHECK_MODULES([QT4], [QtCore QtGui QtNetwork QtXml QtXmlPatterns QtSvg QtSql])
+PKG_CHECK_MODULES([QT4], [QtCore QtGui QtNetwork QtXml QtXmlPatterns QtSvg QtSql QtScript])
 PKG_CHECK_MODULES([LOG4CPP], [log4cpp])
 
 AC_OUTPUT
