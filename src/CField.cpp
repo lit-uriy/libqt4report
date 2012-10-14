@@ -12,8 +12,6 @@ namespace libqt4report {
 		QVariant ret;
 		QString dataType=getAttribute("dataType");
 		
-		qDebug() << "Type" << dataType;
-		
 		if(dataType == "string") {
 			ret=QVariant(getValue());
 		}else if(dataType == "int") {

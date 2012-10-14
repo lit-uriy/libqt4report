@@ -23,8 +23,10 @@ namespace libqt4report {
 		for(i=0;i<depends.size();i++) {
 			CField *field=depends.at(i);
 			QString fieldId=field->getAttribute("id");
+			QScriptValue obj=engine->newVariant(field->getFieldValue());
+			engine->globalObject().setProperty(fieldId, obj);
 			
-			expr.replace("${"+fieldId+"}", field->getFieldValue().toString());
+			expr.replace("${"+fieldId+"}", "this."+fieldId);
 		}
 		
 		
