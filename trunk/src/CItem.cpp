@@ -37,7 +37,7 @@ namespace libqt4report {
 		QString fieldId=attributes.value("fieldId");
 		CField *field=CFields::getInstance()->getField(fieldId);
 		
-		return field->getValue();
+		return field->getFieldValue().toString();
 	}
 	//------------------------------------------------------------------------------
 	QString CItemLineObject::toSvg(int &y) {

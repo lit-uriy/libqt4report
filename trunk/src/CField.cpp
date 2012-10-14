@@ -2,10 +2,31 @@
 #include <QVariant>
 #include <QtDebug>
 #include <QRegExp>
+#include <QDate>
 #include "CField.h"
 #include "CFields.h"
+#include "CScript.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
+	QVariant CField::getFieldValue(void) {
+		QVariant ret;
+		QString dataType=getAttribute("dataType");
+		
+		qDebug() << "Type" << dataType;
+		
+		if(dataType == "string") {
+			ret=QVariant(getValue());
+		}else if(dataType == "int") {
+			ret=QVariant(getValue().toInt());
+		}else if(dataType == "double") {
+			ret=QVariant(getValue().toDouble());
+		}else if(dataType == "date") {
+			ret=QVariant(QDate::fromString(getValue(), "yyyy-MM-dd"));
+		}
+
+		return ret;
+	}
+	//------------------------------------------------------------------------------
 	void CDbFieldObject::process(QSqlRecord *record) {
 		QString fieldName=getAttribute("fieldName");
 
@@ -13,14 +34,7 @@ namespace libqt4report {
 	}
 	//------------------------------------------------------------------------------
 	void CCalculatedFieldObject::process(QSqlRecord *record) {
-		int i;
-		
-		value=expression;
-		for(i=0;i<depends.size();i++) {
-			CField *field=depends.at(i);
-			
-			value.replace("${"+field->getAttribute("id")+"}", field->getValue());
-		}
+		value=CScript::getInstance()->eval(this).toString();
 	}
 	//------------------------------------------------------------------------------
 	void CCalculatedFieldObject::setExpression(QString expression) {
@@ -43,7 +57,7 @@ namespace libqt4report {
 	void CTotalFieldObject::process(QSqlRecord *record) {
 		CField *field=CFields::getInstance()->getField(getAttribute("fieldId"));
 		QString operation=getAttribute("operation");
-		double fValue=field->getValue().toDouble();
+		double fValue=field->getFieldValue().toDouble();
 		
 		if(operation == "sum") {
 			value+=fValue;

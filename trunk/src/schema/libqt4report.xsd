@@ -11,6 +11,16 @@
 				</xsd:restriction>
 			</xsd:simpleType>	
 		</xsd:attribute>
+		<xsd:attribute name="dataType" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="string" />
+					<xsd:pattern value="int" /> 
+					<xsd:pattern value="double" /> 
+					<xsd:pattern value="date" /> 
+				</xsd:restriction>
+			</xsd:simpleType>	
+		</xsd:attribute>
 	</xsd:complexType>
 	
 	<xsd:complexType name="dbFieldObject">
