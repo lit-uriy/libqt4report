@@ -138,7 +138,7 @@ namespace libqt4report {
 				
 				pages.append(svg);
 				
-				//qDebug() << svg;
+				qDebug() << svg;
 				
 				finPage=false;
 			}
