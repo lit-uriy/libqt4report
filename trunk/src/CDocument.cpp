@@ -121,7 +121,6 @@ namespace libqt4report {
 			processFields(&record);
 			
 			if(nouvellePage) {
-				qDebug() << "nouvelle page";
 				svg="<?xml version='1.0' encoding='utf-8'?>";
 				svg+="<svg xmlns='http://www.w3.org/2000/svg' version='1.2' ";
 				svg+="baseProfile='tiny' width='"+QString::number(w)+"' ";
@@ -140,7 +139,6 @@ namespace libqt4report {
 				
 				nouvellePage=false;
 			}
-			
 			svg+=docBody->toSvg(y);
 			
 			hFooter=hPageFooter + (idxRec == lastRec-1 ? hDocFooter : 0);
@@ -150,7 +148,6 @@ namespace libqt4report {
 			}
 			
 			if(finPage) {
-				qDebug() << "fin de page";
 				if(idxRec == lastRec) {
 					if(docFooter != 0) {
 						svg+=docFooter->toSvg(y);
@@ -168,7 +165,7 @@ namespace libqt4report {
 				
 				pages.append(svg);
 				
-				qDebug() << svg;
+				//qDebug() << svg;
 				
 				finPage=false;
 			}

@@ -59,22 +59,33 @@ namespace libqt4report {
 		bool ret=false;
 		
 		xmlReader.setContentHandler(parser);
+		qDebug() << "parse document";
 		if(xmlReader.parse(source)) {
+			qDebug() << "parse document ok";
+			qDebug() << "getDocument";
 			document=parser->getDocument();;
 			
+			qDebug() << "process document";
 			if(document->process()) {
+				qDebug() << "process document ok";
 				ret=true;
 			}else {
+				qDebug() << "process document nok";
 				lastError=document->getLastError();
 			}
 		}else {
+			qDebug() << "parse document nok";
 			lastError="Unable to parse the file : "+parser->errorString();
 		}
 		
+		qDebug() << "cleanup";
 		cleanup();
+		qDebug() << "cleanup Ok";
 		
+		qDebug() << "delete objects";
 		delete parser;
 		delete source;
+		qDebug() << "delete objects ok";
 		
 		return ret;
 	}
