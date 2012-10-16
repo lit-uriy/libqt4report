@@ -3,7 +3,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
-#include <QPaintEngine>>
+#include <QPaintEngine>
 #include <config.h>
 #include "CMainFrm.h"
 //--------------------------------------------------------------------------------------------------------------
@@ -73,6 +73,7 @@ void CMainFrm::on_actionOuvrir_triggered(bool) {
 }
 //--------------------------------------------------------------------------------------------------------------
 void CMainFrm::on_actionRecharger_triggered(bool) {	
+	xmlFile->seek(0);
 	if(report->process(xmlFile)) {
 		nbPage=report->getNbPage();
 		svgWidget=new QSvgWidget();

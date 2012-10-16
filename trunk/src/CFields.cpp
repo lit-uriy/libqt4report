@@ -52,6 +52,20 @@ namespace libqt4report {
 		return true;
 	}
 	//------------------------------------------------------------------------------
+	void CFields::cleanup(void) {
+		int i;
+		
+		for(i=0;i<map->size();i++) {
+			delete map->at(i);
+		}
+		
+		delete map;
+		delete keyMap;
+		delete this;
+		
+		instance=0;
+	}
+	//------------------------------------------------------------------------------
 	CFields * CFields::getInstance(void) {
 		if(instance == 0) {
 			instance=new CFields();

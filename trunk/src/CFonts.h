@@ -10,6 +10,7 @@ namespace libqt4report {
 		public:
 			CFont * getFont(QString key) { return map->value(key); }
 			void addFont(QString key, CFont *font) { map->insert(key, font); }
+			void cleanup(void);
 			static CFonts * getInstance(void);
 		private:
 			static CFonts *instance;

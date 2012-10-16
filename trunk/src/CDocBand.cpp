@@ -36,4 +36,13 @@ namespace libqt4report {
 		return height;
 	}
 	//------------------------------------------------------------------------------
+	void CDocBand::cleanup(void) {
+		QHashIterator<QString, CItem *> i(*this);
+		
+		while (i.hasNext()) {
+			i.next();
+			delete i.value();
+		}
+	}
+	//------------------------------------------------------------------------------
 } //namespace
