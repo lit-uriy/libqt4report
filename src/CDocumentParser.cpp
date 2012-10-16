@@ -11,6 +11,7 @@ namespace libqt4report {
 	static log4cpp::Category& logger = log4cpp::Category::getInstance("CDocumentParser");
 	//--------------------------------------------------------------------------------------------------------------
 	CDocumentParser::CDocumentParser(void) {
+		qDebug() << "CDocumentParser";
 		qRegisterMetaType<CItemTextFixedObject>("CItemTextFixedObject");
 		qRegisterMetaType<CItemTextFieldObject>("CItemTextFieldObject");
 		qRegisterMetaType<CDbFieldObject>("CDbFieldObject");
@@ -18,12 +19,14 @@ namespace libqt4report {
 		qRegisterMetaType<CItemRectObject>("CItemRectObject");
 		qRegisterMetaType<CCalculatedFieldObject>("CCalculatedFieldObject");
 		qRegisterMetaType<CTotalFieldObject>("CTotalFieldObject");
-	}
-	//--------------------------------------------------------------------------------------------------------------
-	bool CDocumentParser::startDocument(void) {
+		
 		document=0;
 		inFonts=inFields=inDatabase=inQuery=inBody=inField=false;
 		curDocBand=edbtNone;
+	}
+	//--------------------------------------------------------------------------------------------------------------
+	bool CDocumentParser::startDocument(void) {
+		qDebug() << "CDocumentParser::startDocument";
 		
 		return true;
 	}
@@ -35,8 +38,12 @@ namespace libqt4report {
 	bool CDocumentParser::startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) {
 		int i;
 		
+		qDebug() << "CDocumentParser::startElement" << qName;
+		
 		if(qName == "document") {
 			int pageWidth, pageHeight;
+
+			qDebug()  << "Parse document element";
 			
 			for(i=0;i<atts.count();i++) {
 				if(atts.localName(i) == "pageWidth") {
@@ -47,6 +54,8 @@ namespace libqt4report {
 			}
 			
 			document=new CDocument(pageWidth, pageHeight);
+			
+			qDebug()  << "document" << document;
 			
 			return true;
 		}
@@ -102,7 +111,7 @@ namespace libqt4report {
 				font->setStyle(style);
 			}
 			
-			qDebug()  << "Add font" << id << "to collection";
+			qDebug()  << "Add fon << source << parser << docFile->atEnd()t" << id << "to collection";
 			CFonts::getInstance()->addFont(id, font);
 			
 			return true;
@@ -221,6 +230,12 @@ namespace libqt4report {
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::endElement(const QString& namespaceURI, const QString& localName, const QString& qName) {
+		if(qName == "document") {
+			int pageWidth, pageHeight;
+
+			qDebug()  << "End parse document element";
+		}
+		
 		if(qName == "fonts") {
 			qDebug()  << "End parse fonts element";
 			inFonts=false;
