@@ -16,6 +16,8 @@ namespace libqt4report {
 			QString getLastError(void) { return lastError; }
 		private:
 			QString lastError;
+			
+			void cleanup(void);
 	};
 } //namespace
 //------------------------------------------------------------------------------

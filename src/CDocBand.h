@@ -12,6 +12,7 @@ namespace libqt4report {
 		public:
 			QString toSvg(int &y);
 			int getHeight(void);
+			void cleanup(void);
 		private:
 			int height;
 	};

@@ -11,6 +11,7 @@ namespace libqt4report {
 		public:
 			static CScript *getInstance(void);
 			QVariant eval(CCalculatedFieldObject *field);
+			void cleanup(void);
 		private:
 			static CScript *instance;
 			QScriptEngine *engine;

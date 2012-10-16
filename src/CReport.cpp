@@ -71,6 +71,8 @@ namespace libqt4report {
 			lastError="Unable to parse the file : "+parser->errorString();
 		}
 		
+		cleanup();
+		
 		delete parser;
 		delete source;
 		
@@ -89,6 +91,12 @@ namespace libqt4report {
 			return document->toSvg(pageIdx);
 		}
 		return "";
+	}
+	//------------------------------------------------------------------------------
+	void CReport::cleanup(void) {
+		if(document != 0) {
+			document->cleanup();
+		}
 	}
 	//------------------------------------------------------------------------------
 } //namespace

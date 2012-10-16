@@ -40,6 +40,11 @@ namespace libqt4report {
 		return ret;
 	}
 	//------------------------------------------------------------------------------
+	void CScript::cleanup(void) {
+		delete this;
+		instance=0;
+	}
+	//------------------------------------------------------------------------------
 	CScript::CScript(){
 		engine=new QScriptEngine();
 	}

@@ -15,6 +15,7 @@ namespace libqt4report {
 			void process(QSqlRecord *record);
 			QString getDependsError(void) { return dependsError; }
 			bool processDepends(void);
+			void cleanup(void);
 			static CFields * getInstance(void);
 		private:
 			static CFields *instance;

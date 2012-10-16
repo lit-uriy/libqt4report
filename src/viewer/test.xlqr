@@ -14,7 +14,6 @@
 		<field xsi:type="dbFieldObject" id="dbQte" fieldName="quantite" dataType="double" />
 		<field xsi:type="dbFieldObject" id="dbPuHT" fieldName="prixUnitaireHT" dataType="double" />
 		<field xsi:type="dbFieldObject" id="dbTTva" fieldName="tauxTva" dataType="double" />
-		<field xsi:type="dbFieldObject" id="dbDate" fieldName="testDate" dataType="string" />
 		<field xsi:type="totalFieldObject" id="tTotalHT" operation="sum" fieldId="cMntHT" dataType="double" />
 		<field xsi:type="totalFieldObject" id="tTotalTTC" operation="sum" fieldId="cMntTTC" dataType="double" />
 		<field xsi:type="calculatedFieldObject" id="cMntHT" dataType="double">
@@ -47,7 +46,7 @@
 			<item xsi:type="textFieldObject" id="puHt" fontId="font1" x="100" y="5" fieldId="dbPuHT" align="end" />
 			<item xsi:type="textFieldObject" id="tTva" fontId="font1" x="130" y="5" fieldId="dbTTva" align="end" />
 			<item xsi:type="textFieldObject" id="tMntHT" fontId="font1" x="170" y="5" fieldId="cMntHT" align="end" />
-			<item xsi:type="textFieldObject" id="tMntTTC" fontId="font1" x="190" y="5" fieldId="dbDate" align="end" />
+			<item xsi:type="textFieldObject" id="tMntTTC" fontId="font1" x="190" y="5" fieldId="cMntTTC" align="end" />
 		</docBody>
 		<docFooter>
 			<item xsi:type="textFixedObject" id="totalTitle" fontId="fontTotal" x="145" y="5" value="Total :" align="end" />

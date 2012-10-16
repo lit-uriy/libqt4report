@@ -3,6 +3,8 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include "CDocument.h"
+#include "CFonts.h"
+#include "CScript.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	CDocument::CDocument(int pageWidth, int pageHeight) {
@@ -56,6 +58,34 @@ namespace libqt4report {
 		database.close();
 		
 		return true;
+	}
+	//------------------------------------------------------------------------------
+	void CDocument::cleanup(void) {
+		if(pageHeader != 0) {
+			pageHeader->cleanup();
+			delete pageHeader;
+		}
+				
+		if(docHeader != 0) {
+			docHeader->cleanup();
+			delete docHeader;
+		}
+		
+		if(docFooter != 0) {
+			docFooter->cleanup();
+			delete docFooter;
+		}
+		
+		if(pageFooter != 0) {
+			pageFooter->cleanup();
+			delete pageFooter;
+		}
+		
+		delete docBody;
+		
+		CFonts::getInstance()->cleanup();
+		CFields::getInstance()->cleanup();
+		CScript::getInstance()->cleanup();
 	}
 	//------------------------------------------------------------------------------
 	void CDocument::createPages(QSqlQuery *query) {

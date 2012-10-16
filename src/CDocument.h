@@ -3,7 +3,6 @@
 #define __CDOCUMENT_H__
 //------------------------------------------------------------------------------
 #include <QHash>
-#include <QFont>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QStringList>
@@ -30,6 +29,7 @@ namespace libqt4report {
 			CDocBand * getDocBody(void) { return docBody; }
 			CDocBand * getDocFooter(void) { return docFooter; }
 			CDocBand * getPageFooter(void) { return pageFooter; }
+			void cleanup(void);
 		private:
 			CDocBand *pageHeader;
 			CDocBand *docHeader;
