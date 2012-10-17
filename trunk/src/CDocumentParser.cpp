@@ -209,10 +209,14 @@ namespace libqt4report {
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::startCDATA(void) {
 		inCDATA=true;
+		
+		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::endCDATA(void) {
 		inCDATA=false;
+		
+		return true;
 	}
 //--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::endElement(const QString& namespaceURI, const QString& localName, const QString& qName) {
@@ -276,8 +280,6 @@ namespace libqt4report {
 			}
 			
 			if(inFieldExpression && curField != 0) {
-				qDebug() << "parse Expression" << ch;
-				
 				CCalculatedFieldObject *cfo=static_cast<CCalculatedFieldObject *>(curField);
 				if(cfo != 0) {
 					try {
@@ -315,8 +317,6 @@ namespace libqt4report {
 			}
 		}
 		
-		
-		
 		return item;
 	}
 	//--------------------------------------------------------------------------------------------------------------
@@ -340,9 +340,7 @@ namespace libqt4report {
 				}
 			}
 		}
-		
-		
-		
+
 		return field;
 	}
 	//--------------------------------------------------------------------------------------------------------------
