@@ -28,6 +28,7 @@ namespace libqt4report {
 			QString getFormatedValue(QString format);
 			QString getFormatedStringValue(QString format);
 			QString getFormatedIntValue(QString format);
+			QString getFormatedDoubleValue(QString format);
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFixedObject : public CItemText {
