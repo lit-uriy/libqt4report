@@ -61,6 +61,7 @@ namespace libqt4report {
 		}
 		
 		xmlReader->setContentHandler(parser);
+		xmlReader->setLexicalHandler(parser);
 		if(xmlReader->parse(source)) {
 			document=parser->getDocument();;
 			
