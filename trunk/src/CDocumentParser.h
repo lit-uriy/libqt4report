@@ -13,6 +13,8 @@ namespace libqt4report {
 			bool startDocument(void);
 			bool endDocument(void);
 			bool startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts);
+			bool startCDATA(void);
+			bool endCDATA(void);
 			bool endElement(const QString& namespaceURI, const QString& localName, const QString& qName);
 			bool characters(const QString& ch);
 			CDocument *getDocument(void) { return document; }
@@ -27,6 +29,7 @@ namespace libqt4report {
 			bool inBody;
 			bool inField;
 			bool inFieldExpression;
+			bool inCDATA;
 			EDBType curDocBand;
 			CField *curField;
 			QString lastError;

@@ -14,6 +14,10 @@ namespace libqt4report {
 		this->pageHeight=pageHeight;
 	}
 	//------------------------------------------------------------------------------
+	CDocument::~CDocument(void) {
+		pages.clear();
+	}
+	//------------------------------------------------------------------------------
 	int CDocument::getNbPage(void) {
 		return pages.size();;
 	}
@@ -54,7 +58,7 @@ namespace libqt4report {
 			
 			return false;
 		}
-		
+		query.clear();
 		database.close();
 		
 		return true;
@@ -81,6 +85,7 @@ namespace libqt4report {
 			delete pageFooter;
 		}
 		
+		docBody->cleanup();
 		delete docBody;
 		
 		CFonts::getInstance()->cleanup();

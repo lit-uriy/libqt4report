@@ -11,7 +11,6 @@ namespace libqt4report {
 	static log4cpp::Category& logger = log4cpp::Category::getInstance("CDocumentParser");
 	//--------------------------------------------------------------------------------------------------------------
 	CDocumentParser::CDocumentParser(void) {
-		qDebug() << "CDocumentParser";
 		qRegisterMetaType<CItemTextFixedObject>("CItemTextFixedObject");
 		qRegisterMetaType<CItemTextFieldObject>("CItemTextFieldObject");
 		qRegisterMetaType<CDbFieldObject>("CDbFieldObject");
@@ -21,13 +20,11 @@ namespace libqt4report {
 		qRegisterMetaType<CTotalFieldObject>("CTotalFieldObject");
 		
 		document=0;
-		inFonts=inFields=inDatabase=inQuery=inBody=inField=false;
+		inFonts=inFields=inDatabase=inQuery=inBody=inField=inCDATA=false;
 		curDocBand=edbtNone;
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::startDocument(void) {
-		qDebug() << "CDocumentParser::startDocument";
-		
 		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------------
@@ -38,13 +35,9 @@ namespace libqt4report {
 	bool CDocumentParser::startElement(const QString& namespaceURI, const QString& localName, const QString& qName, const QXmlAttributes& atts) {
 		int i;
 		
-		qDebug() << "CDocumentParser::startElement" << qName;
-		
 		if(qName == "document") {
 			int pageWidth, pageHeight;
 
-			qDebug()  << "Parse document element";
-			
 			for(i=0;i<atts.count();i++) {
 				if(atts.localName(i) == "pageWidth") {
 					pageWidth=atts.value(i).toInt();
@@ -55,31 +48,25 @@ namespace libqt4report {
 			
 			document=new CDocument(pageWidth, pageHeight);
 			
-			qDebug()  << "document" << document;
-			
 			return true;
 		}
 		
 		if(qName == "fonts") {
-			qDebug()  << "Parse fonts element";
 			inFonts=true;
 			return true;
 		}
 		
 		if(qName == "fields") {
-			qDebug()  << "Parse fields element";
 			inFields=true;
 			return true;
 		}
 		
 		if(qName == "database") {
-			qDebug()  << "Parse database element";
 			inDatabase=true;
 			return true;
 		}
 		
 		if(qName == "query" && inDatabase) {
-			qDebug()  << "Parse query element";
 			inQuery=true;
 			return true;
 		}
@@ -111,7 +98,6 @@ namespace libqt4report {
 				font->setStyle(style);
 			}
 			
-			qDebug()  << "Add fon << source << parser << docFile->atEnd()t" << id << "to collection";
 			CFonts::getInstance()->addFont(id, font);
 			
 			return true;
@@ -121,7 +107,6 @@ namespace libqt4report {
 			CField *field=parseField(atts);
 			QString id=field->getAttribute("id");
 			
-			qDebug()  << "Add field" << id << "to collection";
 			CFields::getInstance()->addField(id, field);
 			
 			curField=field;
@@ -159,48 +144,41 @@ namespace libqt4report {
 		}
 		
 		if(qName == "body") {
-			qDebug()  << "Parse body element";
 			inBody=true;
 			return true;
 		}
 		
 		if(qName == "pageHeader" && inBody) {
-			qDebug()  << "Parse pageHeader element";
 			document->createPageHeader();
 			curDocBand=edbtPageHeader;
 			return true;
 		}
 		
 		if(qName == "docHeader" && inBody) {
-			qDebug()  << "Parse docHeader element";
 			document->createDocHeader();
 			curDocBand=edbtDocHeader;
 			return true;
 		}
 		
 		if(qName == "docBody" && inBody) {
-			qDebug()  << "Parse docBody element";
 			document->createDocBody();
 			curDocBand=edbtDocBody;
 			return true;
 		}
 		
 		if(qName == "docFooter" && inBody) {
-			qDebug()  << "Parse docFooter element";
 			document->createDocFooter();
 			curDocBand=edbtDocFooter;
 			return true;
 		}
 		
 		if(qName == "pageFooter" && inBody) {
-			qDebug()  << "Parse pageFooter element";
 			document->createPageFooter();
 			curDocBand=edbtPageFooter;
 			return true;
 		}
 		
 		if(qName == "item" && curDocBand != edbtNone) {
-			qDebug()  << "Parse item element";
 			CItem *item=parseItem(atts);
 			if(item != 0) {
 				switch(curDocBand) {
@@ -229,21 +207,25 @@ namespace libqt4report {
 		return true;
 	}
 	//--------------------------------------------------------------------------------------------------------------
+	bool CDocumentParser::startCDATA(void) {
+		inCDATA=true;
+	}
+	//--------------------------------------------------------------------------------------------------------------
+	bool CDocumentParser::endCDATA(void) {
+		inCDATA=false;
+	}
+//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::endElement(const QString& namespaceURI, const QString& localName, const QString& qName) {
 		if(qName == "document") {
-			int pageWidth, pageHeight;
-
-			qDebug()  << "End parse document element";
+			return true;
 		}
 		
 		if(qName == "fonts") {
-			qDebug()  << "End parse fonts element";
 			inFonts=false;
 			return true;
 		}
 		
 		if(qName == "fields") {
-			qDebug()  << "End parse fields element";
 			inFields=false;
 			if(!CFields::getInstance()->processDepends()) {
 				lastError=CFields::getInstance()->getDependsError();
@@ -253,25 +235,21 @@ namespace libqt4report {
 		}
 		
 		if(qName == "database") {
-			qDebug()  << "End parse database element";
 			inDatabase=false;
 			return true;
 		}
 		
 		if(qName == "query" && inDatabase) {
-			qDebug()  << "End parse query element";
 			inQuery=false;
 			return true;
 		}
 		
 		if(qName == "inBody") {
-			qDebug()  << "End parse body element";
 			inBody=false;
 			return true;
 		}
 		
 		if(inBody && (qName == "pageHeader" || qName == "docHeader" || qName == "docBody"|| qName == "docFooter" || qName == "pageFooter")) {
-			qDebug()  << "End parse" <<  qName << "element";
 			curDocBand=edbtNone;
 			return true;
 		}
@@ -291,22 +269,26 @@ namespace libqt4report {
 	}
 	//--------------------------------------------------------------------------------------------------------------
 	bool CDocumentParser::characters(const QString& ch) {
-		if(inQuery) {
-			document->setQuery(ch);
-			return true;
-		}
-		
-		if(inFieldExpression && curField != 0) {
-			CCalculatedFieldObject *cfo=static_cast<CCalculatedFieldObject *>(curField);
-			if(cfo != 0) {
-				try {
-					cfo->setExpression(ch);
-				}catch(QString *e) {
-					lastError=*e;
-					return false;
-				}
+		if(inCDATA) {
+			if(inQuery) {
+				document->setQuery(ch);
+				return true;
 			}
-			return true;
+			
+			if(inFieldExpression && curField != 0) {
+				qDebug() << "parse Expression" << ch;
+				
+				CCalculatedFieldObject *cfo=static_cast<CCalculatedFieldObject *>(curField);
+				if(cfo != 0) {
+					try {
+						cfo->setExpression(ch);
+					}catch(QString *e) {
+						lastError=*e;
+						return false;
+					}
+				}
+				return true;
+			}
 		}
 		
 		return true;
@@ -322,8 +304,6 @@ namespace libqt4report {
 				className="CItem"+atts.value(i).left(1).toUpper()+atts.value(i).mid(1);
 				
 				int id=QMetaType::type(className.toUtf8().data());
-				
-				qDebug() << className << id;
 				
 				if(id != 0) {
 					item=static_cast<CItem *>(QMetaType::construct(id));
@@ -350,8 +330,6 @@ namespace libqt4report {
 				className="C"+atts.value(i).left(1).toUpper()+atts.value(i).mid(1);
 				
 				int id=QMetaType::type(className.toUtf8().data());
-				
-				qDebug() << className << id;
 				
 				if(id != 0) {
 					field=static_cast<CField *>(QMetaType::construct(id));
