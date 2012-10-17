@@ -17,7 +17,7 @@ namespace libqt4report {
 	static CDocument * document;
 	//------------------------------------------------------------------------------
 	CReport::CReport(void) {
-		log4cpp::PropertyConfigurator::configure("log4cpp.properties");
+		log4cpp::PropertyConfigurator::configure((QString(DATADIR)+"/log4cpp.properties").toStdString());
 		document=0;
 	}
 	//------------------------------------------------------------------------------

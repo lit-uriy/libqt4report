@@ -14,9 +14,9 @@ namespace libqt4report {
 		
 		if(dataType == "string") {
 			ret=QVariant(getValue());
-		}else if(dataType == "int") {
+		}else if(dataType == "integer") {
 			ret=QVariant(getValue().toInt());
-		}else if(dataType == "double") {
+		}else if(dataType == "real") {
 			ret=QVariant(getValue().toDouble());
 		}else if(dataType == "date") {
 			ret=QVariant(QDate::fromString(getValue(), "yyyy-MM-dd"));

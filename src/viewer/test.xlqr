@@ -11,21 +11,21 @@
 	</fonts>
 	<fields>
 		<field xsi:type="dbFieldObject" id="dbArticle" fieldName="article" dataType="string" />
-		<field xsi:type="dbFieldObject" id="dbQte" fieldName="quantite" dataType="double" />
-		<field xsi:type="dbFieldObject" id="dbPuHT" fieldName="prixUnitaireHT" dataType="double" />
-		<field xsi:type="dbFieldObject" id="dbTTva" fieldName="tauxTva" dataType="double" />
-		<field xsi:type="totalFieldObject" id="tTotalHT" operation="sum" fieldId="cMntHT" dataType="double" />
-		<field xsi:type="totalFieldObject" id="tTotalTTC" operation="sum" fieldId="cMntTTC" dataType="double" />
-		<field xsi:type="calculatedFieldObject" id="cMntHT" dataType="double">
+		<field xsi:type="dbFieldObject" id="dbQte" fieldName="quantite" dataType="real" />
+		<field xsi:type="dbFieldObject" id="dbPuHT" fieldName="prixUnitaireHT" dataType="real" />
+		<field xsi:type="dbFieldObject" id="dbTTva" fieldName="tauxTva" dataType="real" />
+		<field xsi:type="totalFieldObject" id="tTotalHT" operation="sum" fieldId="cMntHT" dataType="real" />
+		<field xsi:type="totalFieldObject" id="tTotalTTC" operation="sum" fieldId="cMntTTC" dataType="real" />
+		<field xsi:type="calculatedFieldObject" id="cMntHT" dataType="real">
 			<expression><![CDATA[${dbPuHT}*${dbQte}]]></expression>
 		</field>
-		<field xsi:type="calculatedFieldObject" id="cMntTTC" dataType="double">
+		<field xsi:type="calculatedFieldObject" id="cMntTTC" dataType="real">
 			<expression><![CDATA[${cMntHT}*(1+${dbTTva})]]></expression>
 		</field>
 	</fields>
 	<database>
 		<connection driver="QMYSQL" host="127.0.0.1" userName="test" password="" dbName="test" />
-		<query><![CDATA[SELECT article, quantite, prixUnitaireHT, tauxTva FROM ligneCommandes ORDER BY commande, numeroLigne]]></query>
+		<query><![CDATA[SELECT article, quantite*50000 AS quantite, prixUnitaireHT, tauxTva FROM ligneCommandes ORDER BY commande, numeroLigne]]></query>
 	</database>
 	<body>
 		<pageHeader>
@@ -42,11 +42,11 @@
 		</docHeader>
 		<docBody>
 			<item xsi:type="textFieldObject" id="code" fontId="font1" x="5" y="5" fieldId="dbArticle" />
-			<item xsi:type="textFieldObject" id="nom" fontId="font1" x="50" y="5" fieldId="dbQte" align="end" />
-			<item xsi:type="textFieldObject" id="puHt" fontId="font1" x="100" y="5" fieldId="dbPuHT" align="end" />
-			<item xsi:type="textFieldObject" id="tTva" fontId="font1" x="130" y="5" fieldId="dbTTva" align="end" />
-			<item xsi:type="textFieldObject" id="tMntHT" fontId="font1" x="170" y="5" fieldId="cMntHT" align="end" />
-			<item xsi:type="textFieldObject" id="tMntTTC" fontId="font1" x="190" y="5" fieldId="cMntTTC" align="end" />
+			<item xsi:type="textFieldObject" id="nom" fontId="font1" x="50" y="5" fieldId="dbQte" align="end" format="i,"/>
+			<item xsi:type="textFieldObject" id="puHt" fontId="font1" x="100" y="5" fieldId="dbPuHT" align="end" format="r.2" />
+			<item xsi:type="textFieldObject" id="tTva" fontId="font1" x="130" y="5" fieldId="dbTTva" align="end" format="r.3" />
+			<item xsi:type="textFieldObject" id="tMntHT" fontId="font1" x="170" y="5" fieldId="cMntHT" align="end" format="r.2" />
+			<item xsi:type="textFieldObject" id="tMntTTC" fontId="font1" x="190" y="5" fieldId="cMntTTC" align="end" format="r.2" />
 		</docBody>
 		<docFooter>
 			<item xsi:type="textFixedObject" id="totalTitle" fontId="fontTotal" x="145" y="5" value="Total :" align="end" />

@@ -3,6 +3,7 @@
 #define __CITEM_H__
 //------------------------------------------------------------------------------
 #include <QHash>
+#include <QVariant>
 #include "CPrintableObject.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
@@ -22,17 +23,21 @@ namespace libqt4report {
 			QString toSvg(int &y);
 			int getHeight(void) { return (int)(attributes.value("y").toDouble()*CPrintableObject::getCoef()); }
 		protected:
-			virtual QString getValue(void) = 0;
+			virtual QVariant getValue(void) = 0;
+		private:
+			QString getFormatedValue(QString format);
+			QString getFormatedStringValue(QString format);
+			QString getFormatedIntValue(QString format);
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFixedObject : public CItemText {
 		protected:
-			QString getValue(void) { return attributes.value("value"); }
+			QVariant getValue(void) { return QVariant(attributes.value("value")); }
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFieldObject : public CItemText {
 		protected:
-			QString getValue(void);
+			QVariant getValue(void);
 	};
 	//------------------------------------------------------------------------------
 	class CItemLineObject : public CItem {
