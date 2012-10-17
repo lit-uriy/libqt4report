@@ -15,8 +15,8 @@
 			<xsd:simpleType>
 				<xsd:restriction base="xsd:string">
 					<xsd:pattern value="string" />
-					<xsd:pattern value="int" /> 
-					<xsd:pattern value="double" /> 
+					<xsd:pattern value="integer" /> 
+					<xsd:pattern value="real" /> 
 					<xsd:pattern value="date" /> 
 				</xsd:restriction>
 			</xsd:simpleType>	
@@ -83,6 +83,13 @@
 							<xsd:enumeration value="start" />
 							<xsd:enumeration value="end" />
 							<xsd:enumeration value="middle" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="format">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:pattern value="s([0-9]*[lr]\S)?|i,?|r[0-9]*(\.[0-9])*,?|d" />
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:attribute>

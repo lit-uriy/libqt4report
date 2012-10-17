@@ -1,6 +1,7 @@
 //------------------------------------------------------------------------------
 #include <QtDebug>
 #include <QVariant>
+#include <QDate>
 #include "CItem.h"
 #include "CFields.h"
 #include "CFonts.h"
@@ -8,7 +9,7 @@
 namespace libqt4report {
 	QString CItemText::toSvg(int &y) {
 		double coef=CPrintableObject::getCoef();
-		QString value=CPrintableObject::xmlEncode(getValue());
+		QString value=CPrintableObject::xmlEncode(getFormatedValue(attributes.value("format")));
 		QString align="";
 		QString style="style='";
 		CFont *font=CFonts::getInstance()->getFont(attributes.value("fontId"));
@@ -33,11 +34,72 @@ namespace libqt4report {
 			.arg(value);
 	}
 	//------------------------------------------------------------------------------
-	QString CItemTextFieldObject::getValue(void) {
+	QString CItemText::getFormatedValue(QString format) {
+		QVariant value=getValue();
+		
+		if(format != "") {
+			QString ret;
+			
+			switch(format.at(0).toAscii()) {
+				case 'd':
+					ret=value.toDate().toString("yyyy-MM-dd");
+					break;
+				case 'i':
+					return getFormatedIntValue(format);
+					break;
+				case 'r':
+					ret=value.toString();
+					break;
+				case 's': 
+					return getFormatedStringValue(format);
+				default:
+					break;
+			}
+			
+			return ret;
+		}else {
+			return value.toString();
+		}
+	}
+	//------------------------------------------------------------------------------
+	QString CItemText::getFormatedStringValue(QString format) {
+		QRegExp regExp("s(([0-9]*)(([lr])(\\S+)))?");
+		QString value=getValue().toString();
+		
+		if(regExp.indexIn(format, 0) != -1) {
+			int len;
+			QChar pad;
+			QString padDir;
+			
+			len=regExp.cap(2).toInt();
+			padDir=regExp.cap(4);
+			pad=regExp.cap(5).at(0);
+			
+			if(padDir == "l") {
+				return value.rightJustified(len, pad, false);
+			}else {
+				return value.leftJustified(len, pad, false);
+			}
+		}
+		
+		return value;
+	}
+	//------------------------------------------------------------------------------
+	QString CItemText::getFormatedIntValue(QString format) {
+		QString value=getValue().toString();
+		QString ret=value;
+		if(format.size() == 2) {
+			ret=QString("%L1").arg(value.toInt());
+		}
+		
+		return ret;
+	}
+	//------------------------------------------------------------------------------
+	QVariant CItemTextFieldObject::getValue(void) {
 		QString fieldId=attributes.value("fieldId");
 		CField *field=CFields::getInstance()->getField(fieldId);
 		
-		return field->getFieldValue().toString();
+		return field->getFieldValue();
 	}
 	//------------------------------------------------------------------------------
 	QString CItemLineObject::toSvg(int &y) {
