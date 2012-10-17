@@ -48,7 +48,7 @@ namespace libqt4report {
 					return getFormatedIntValue(format);
 					break;
 				case 'r':
-					ret=value.toString();
+					return getFormatedDoubleValue(format);
 					break;
 				case 's': 
 					return getFormatedStringValue(format);
@@ -86,13 +86,21 @@ namespace libqt4report {
 	}
 	//------------------------------------------------------------------------------
 	QString CItemText::getFormatedIntValue(QString format) {
-		QString value=getValue().toString();
-		QString ret=value;
-		if(format.size() == 2) {
-			ret=QString("%L1").arg(value.toInt());
+		return QString("%L1").arg(getValue().toInt());
+	}
+	//------------------------------------------------------------------------------
+	QString CItemText::getFormatedDoubleValue(QString format) {
+		QRegExp regExp("r(\\.([0-9]*))?");
+		QString value;
+		
+		if(regExp.indexIn(format, 0) != -1) {
+			int nbDecimaux;
+			
+			nbDecimaux=regExp.cap(2).toInt();
+			value=QString("%L1").arg(getValue().toDouble(), 0, 'f', nbDecimaux != 0 ? nbDecimaux : -1);
 		}
 		
-		return ret;
+		return value;
 	}
 	//------------------------------------------------------------------------------
 	QVariant CItemTextFieldObject::getValue(void) {
