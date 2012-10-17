@@ -145,20 +145,5 @@ namespace libqt4report {
 		}
 	}
 	//------------------------------------------------------------------------------
-	void CFields::printMap(void) {
-		int i;
-		for(i=0;i<map->size();i++) {
-			qDebug() << i << map->at(i)->getAttribute("id") << map->at(i)->getPoid();
-		}
-	}
-	//------------------------------------------------------------------------------
-	void CFields::printKeyMap(void) {
-		QHashIterator<QString, int> i(*keyMap);
-		while (i.hasNext()) {
-			i.next();
-			qDebug() << i.key() << i.value();
-		}
-	}
-	//------------------------------------------------------------------------------
 }//namespace
 //------------------------------------------------------------------------------

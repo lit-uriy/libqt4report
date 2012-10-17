@@ -13,6 +13,7 @@ namespace libqt4report {
 	class CDocument {
 		public:
 			CDocument(int pageWidth, int pageHeight);
+			~CDocument(void);
 			int getNbPage(void);
 			QString toSvg(int pageIdx);
 			QString getLastError(void) { return lastError; }

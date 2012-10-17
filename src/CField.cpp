@@ -36,19 +36,26 @@ namespace libqt4report {
 	}
 	//------------------------------------------------------------------------------
 	void CCalculatedFieldObject::setExpression(QString expression) {
+		qDebug() << "setExpression" << expression;
 		this->expression=expression;
 		QRegExp regExp("\\$\\{([a-zA-Z0-9]*)\\}");
 		int pos = 0;
+		qDebug() << "Find depends";
 		while ((pos = regExp.indexIn(expression, pos)) != -1) {
 			QString fieldId=regExp.cap(1);
+			qDebug() << "depend"; 
 			pos += regExp.matchedLength();
+			qDebug() << "getField";
 			CField *field=CFields::getInstance()->getField(fieldId);
+			qDebug() << "field :" << field;
 			
 			if(field == 0) {
 				throw new QString("Field "+fieldId+" not exists !");
 				return;
 			}
+			qDebug() << "add field to depends";
 			depends << field;
+			qDebug() << "nex depend";
 		}
 	}
 	//------------------------------------------------------------------------------

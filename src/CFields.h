@@ -29,9 +29,6 @@ namespace libqt4report {
 			void quickSort(int premier, int dernier);
 			int partitionner(int premier, int dernier, int pivot);
 			void swap(CField *f1, CField *f2);
-			
-			void printMap(void);
-			void printKeyMap(void);
 	};
 } //namespace
 //------------------------------------------------------------------------------
