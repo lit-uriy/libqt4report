@@ -89,7 +89,7 @@
 				<xsd:attribute name="format">
 					<xsd:simpleType>
 						<xsd:restriction base="xsd:string">
-							<xsd:pattern value="s([0-9]*[lr]\S)?|i|r(\.[0-9]*)?|d" />
+							<xsd:pattern value="r[eEfgG]?[0-9]*|d.*" />
 						</xsd:restriction>
 					</xsd:simpleType>
 				</xsd:attribute>

@@ -42,16 +42,16 @@
 		</docHeader>
 		<docBody>
 			<item xsi:type="textFieldObject" id="code" fontId="font1" x="5" y="5" fieldId="dbArticle" />
-			<item xsi:type="textFieldObject" id="nom" fontId="font1" x="50" y="5" fieldId="dbQte" align="end" format="i"/>
-			<item xsi:type="textFieldObject" id="puHt" fontId="font1" x="100" y="5" fieldId="dbPuHT" align="end" format="r.2" />
-			<item xsi:type="textFieldObject" id="tTva" fontId="font1" x="130" y="5" fieldId="dbTTva" align="end" format="r.3" />
-			<item xsi:type="textFieldObject" id="tMntHT" fontId="font1" x="170" y="5" fieldId="cMntHT" align="end" format="r.2" />
-			<item xsi:type="textFieldObject" id="tMntTTC" fontId="font1" x="190" y="5" fieldId="cMntTTC" align="end" format="r.2" />
+			<item xsi:type="textFieldObject" id="nom" fontId="font1" x="50" y="5" fieldId="dbQte" align="end" />
+			<item xsi:type="textFieldObject" id="puHt" fontId="font1" x="100" y="5" fieldId="dbPuHT" align="end" format="rf2" />
+			<item xsi:type="textFieldObject" id="tTva" fontId="font1" x="130" y="5" fieldId="dbTTva" align="end" format="rf3" />
+			<item xsi:type="textFieldObject" id="tMntHT" fontId="font1" x="170" y="5" fieldId="cMntHT" align="end" format="rf2" />
+			<item xsi:type="textFieldObject" id="tMntTTC" fontId="font1" x="190" y="5" fieldId="cMntTTC" align="end" format="rf2" />
 		</docBody>
 		<docFooter>
 			<item xsi:type="textFixedObject" id="totalTitle" fontId="fontTotal" x="145" y="5" value="Total :" align="end" />
-			<item xsi:type="textFieldObject" id="totalHT" fontId="fontTotal" x="170" y="5" fieldId="tTotalHT"  align="end" format="r.2" />
-			<item xsi:type="textFieldObject" id="totalTTC" fontId="fontTotal" x="190" y="5" fieldId="tTotalTTC"  align="end" format="r.2" />
+			<item xsi:type="textFieldObject" id="totalHT" fontId="fontTotal" x="170" y="5" fieldId="tTotalHT"  align="end" format="rf2" />
+			<item xsi:type="textFieldObject" id="totalTTC" fontId="fontTotal" x="190" y="5" fieldId="tTotalTTC"  align="end" format="rf2" />
 		</docFooter>
 		<pageFooter>
 			<item xsi:type="rectObject" id="rectFooter" x="2" y="2" width="206" height="5" color="green" /> 

@@ -24,11 +24,6 @@ namespace libqt4report {
 			int getHeight(void) { return (int)(attributes.value("y").toDouble()*CPrintableObject::getCoef()); }
 		protected:
 			virtual QVariant getValue(void) = 0;
-		private:
-			QString getFormatedValue(QString format);
-			QString getFormatedStringValue(QString format);
-			QString getFormatedIntValue(QString format);
-			QString getFormatedDoubleValue(QString format);
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFixedObject : public CItemText {
