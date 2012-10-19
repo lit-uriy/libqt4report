@@ -29,9 +29,9 @@ libqt4report_la_LIBADD = $(QT4_LIBS) $(LOG4CPP_LIBS)
 
 libqt4report_ladir = $(datarootdir)/@PACKAGE@
 
-libqt4report_la_DATA = $(lrelease_FILES) log4cpp.properties
+libqt4report_la_DATA = $(lrelease_FILES) log4cpp.properties schema/libqt4report.xsd
 
-dist_libqt4report_la_DATA = $(INTERFACES) $(TRANSLATE) $(RESSOURCES) log4cpp.properties
+dist_libqt4report_la_DATA = $(INTERFACES) $(TRANSLATE) $(RESSOURCES) log4cpp.properties schema/libqt4report.xsd
 
 $(SCHEMA): schema/libqt4report.xsd
 	echo -n 'static QByteArray schema("' > $@ 
