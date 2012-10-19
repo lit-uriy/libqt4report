@@ -8,31 +8,15 @@
 #include "CScript.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
-	QVariant CField::getFieldValue(void) {
-		QVariant ret;
-		QString dataType=getAttribute("dataType");
-		
-		if(dataType == "string") {
-			ret=QVariant(getValue());
-		}else if(dataType == "integer") {
-			ret=QVariant(getValue().toInt());
-		}else if(dataType == "real") {
-			ret=QVariant(getValue().toDouble());
-		}else if(dataType == "date") {
-			ret=QVariant(QDate::fromString(getValue(), "yyyy-MM-dd"));
-		}
-
-		return ret;
-	}
 	//------------------------------------------------------------------------------
 	void CDbFieldObject::process(QSqlRecord *record) {
 		QString fieldName=getAttribute("fieldName");
 
-		value=record->value(fieldName).toString();
+		setFieldValue(record->value(fieldName));
 	}
 	//------------------------------------------------------------------------------
 	void CCalculatedFieldObject::process(QSqlRecord *record) {
-		value=CScript::getInstance()->eval(this).toString();
+		setFieldValue(CScript::getInstance()->eval(this));
 	}
 	//------------------------------------------------------------------------------
 	void CCalculatedFieldObject::setExpression(QString expression) {
@@ -76,6 +60,8 @@ namespace libqt4report {
 				value=fValue;
 			}
 		}
+		
+		setFieldValue(QVariant(value));
 	}
 	//------------------------------------------------------------------------------
 	const QList<CField *> CTotalFieldObject::getDepends(void) {

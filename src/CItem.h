@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QVariant>
 #include "CPrintableObject.h"
+#include "CValueType.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	class CItem : public CPrintableObject {
@@ -12,8 +13,9 @@ namespace libqt4report {
 			virtual ~CItem(void) {}
 			void setAttribute(QString name, QString value) { attributes.insert(name, value); }
 			QString getAttribute(QString name) { return attributes.value(name) ;}
+			bool hasAttribute(QString name) { return attributes.contains(name); }
 			virtual int getHeight(void) = 0;
-		protected:
+		private:
 			QHash<QString ,QString> attributes;
 	};
 	//------------------------------------------------------------------------------
@@ -21,19 +23,23 @@ namespace libqt4report {
 		public:
 			virtual ~CItemText(void) {}
 			QString toSvg(int &y);
-			int getHeight(void) { return (int)(attributes.value("y").toDouble()*CPrintableObject::getCoef()); }
+			int getHeight(void) { return (int)(getAttribute("y").toDouble()*CPrintableObject::getCoef()); }
 		protected:
-			virtual QVariant getValue(void) = 0;
+			virtual QString getValue(void) = 0;
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFixedObject : public CItemText {
 		protected:
-			QVariant getValue(void) { return QVariant(attributes.value("value")); }
+			QString getValue(void);
 	};
 	//------------------------------------------------------------------------------
 	class CItemTextFieldObject : public CItemText {
+		public:
+			~CItemTextFieldObject(void);
+			void createValue(QString fieldId);
 		protected:
-			QVariant getValue(void);
+			CValueType *value;
+			QString getValue(void);
 	};
 	//------------------------------------------------------------------------------
 	class CItemLineObject : public CItem {

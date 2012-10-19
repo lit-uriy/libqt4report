@@ -5,6 +5,7 @@
 #include <QHash>
 #include <QSqlRecord>
 #include <QStringList>
+#include <QVariant>
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	class CField {
@@ -13,7 +14,7 @@ namespace libqt4report {
 			void setAttribute(QString name, QString value) { attributes.insert(name, value); }
 			QString getAttribute(QString name) { return attributes.value(name); }
 			virtual void process(QSqlRecord *record) = 0;
-			QVariant getFieldValue(void);
+			QVariant getFieldValue(void) { return value; }
 			void resetPoid(void) { poid=0; }
 			void decPoid(void) { poid--; }
 			int getPoid(void) { return poid; }
@@ -21,17 +22,14 @@ namespace libqt4report {
 		protected:
 			QHash<QString ,QString> attributes;
 			int poid;
+			QVariant value;
 			
-			virtual QString getValue(void) = 0;
+			void setFieldValue(QVariant value) { this->value=value; }
 	};
 	//------------------------------------------------------------------------------
 	class CDbFieldObject : public CField {
 		public:
 			void process(QSqlRecord *record);
-		private:
-			QString value;
-			
-			QString getValue(void) { return value; }
 	};
 	//------------------------------------------------------------------------------
 	class CCalculatedFieldObject : public CField {
@@ -41,11 +39,8 @@ namespace libqt4report {
 			QString getExpression(void) { return expression; }
 			const QList<CField *> getDepends(void) { return depends; }
 		private:
-			QString value;
 			QString expression;
 			QList<CField *> depends;
-			
-			QString getValue(void) { return value; }
 	};
 	//------------------------------------------------------------------------------
 	class CTotalFieldObject : public CField {
@@ -58,8 +53,6 @@ namespace libqt4report {
 			double sum;
 			int nb;
 			bool firstTime;
-			
-			QString getValue(void) { return QString::number(value); }
 	};
 } //namespace
 //------------------------------------------------------------------------------

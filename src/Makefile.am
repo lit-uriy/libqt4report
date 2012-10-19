@@ -20,7 +20,8 @@ libqt4report_la_SOURCES =	CReport.cpp CReport.h \
 				CFields.cpp CFields.h  \
 				CFont.h \
 				CFonts.cpp CFonts.h \
-				CScript.cpp CScript.h
+				CScript.cpp CScript.h \
+				CValueType.cpp CValueType.h
 						
 nodist_libqt4report_la_SOURCES = $(moc_FILES)
 			
