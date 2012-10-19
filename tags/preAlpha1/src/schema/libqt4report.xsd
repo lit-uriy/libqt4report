@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://corentin-lebail.eu/libqt4report"
+			xmlns:lqr="http://corentin-lebail.eu/libqt4report">
+			
+	<xsd:complexType name="fieldObject" abstract="true">
+		<xsd:attribute name="id" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="[a-zA-Z0-9]*" /> 
+				</xsd:restriction>
+			</xsd:simpleType>	
+		</xsd:attribute>
+		<xsd:attribute name="dataType" use="required">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:pattern value="string" />
+					<xsd:pattern value="integer" /> 
+					<xsd:pattern value="real" /> 
+					<xsd:pattern value="date" /> 
+				</xsd:restriction>
+			</xsd:simpleType>	
+		</xsd:attribute>
+	</xsd:complexType>
+	
+	<xsd:complexType name="dbFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:fieldObject">
+				<xsd:attribute name="fieldName" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:element name="expression">
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string"/>
+		</xsd:simpleType>
+	</xsd:element>
+	
+	<xsd:complexType name="calculatedFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:fieldObject">
+				<xsd:sequence>
+					<xsd:element ref="lqr:expression" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="totalFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:fieldObject">
+				<xsd:attribute name="operation" use="required">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="sum" />
+							<xsd:enumeration value="avg" />
+							<xsd:enumeration value="count" />
+							<xsd:enumeration value="min" />
+							<xsd:enumeration value="max" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="fieldId" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="object" abstract="true">
+		<xsd:attribute name="id" type="xsd:string" use="required" />
+		<xsd:attribute name="x" type="xsd:int" use="required" />
+		<xsd:attribute name="y" type="xsd:int" use="required" />
+		<xsd:attribute name="color" type="xsd:string" />
+	</xsd:complexType>
+
+	<xsd:complexType name="textObject" abstract="true">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:object">
+				<xsd:attribute name="fontId" type="xsd:string" use="required" />
+				<xsd:attribute name="align">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:enumeration value="start" />
+							<xsd:enumeration value="end" />
+							<xsd:enumeration value="middle" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+				<xsd:attribute name="format">
+					<xsd:simpleType>
+						<xsd:restriction base="xsd:string">
+							<xsd:pattern value="r[eEfgG]?[0-9]*|d.*" />
+						</xsd:restriction>
+					</xsd:simpleType>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="lineObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:object">
+				<xsd:attribute name="width" type="xsd:int" use="required" />
+				<xsd:attribute name="height" type="xsd:int" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="rectObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:lineObject" />
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="textFixedObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:textObject">
+				<xsd:attribute name="value" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="textFieldObject">
+		<xsd:complexContent>
+			<xsd:extension base="lqr:textObject">
+				<xsd:attribute name="fieldId" type="xsd:string" use="required" />
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+	
+	<xsd:complexType name="docBand" abstract="true">
+		<xsd:sequence>
+			<xsd:element ref="lqr:item" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	
+	<xsd:element name="font">
+		<xsd:complexType>
+			<xsd:attribute name="id" type="xsd:string" use="required" />
+			<xsd:attribute name="family" type="xsd:string" use="required" />
+			<xsd:attribute name="size" type="xsd:int" use="required" />
+			<xsd:attribute name="weight" default="normal">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="normal" />
+						<xsd:enumeration value="bold" />
+						<xsd:enumeration value="bolder" /> 
+						<xsd:enumeration value="lighter" />
+						<xsd:enumeration value="100" />
+						<xsd:enumeration value="200" />
+						<xsd:enumeration value="300" />
+						<xsd:enumeration value="400" />
+						<xsd:enumeration value="500" />
+						<xsd:enumeration value="600" />
+						<xsd:enumeration value="700" />
+						<xsd:enumeration value="800" />
+						<xsd:enumeration value="900" />
+						<xsd:enumeration value="inherit" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+			<xsd:attribute name="style" default="normal">
+				<xsd:simpleType>
+					<xsd:restriction base="xsd:string">
+						<xsd:enumeration value="normal" />
+						<xsd:enumeration value="italic" />
+						<xsd:enumeration value="oblique" /> 
+						<xsd:enumeration value="inherit" />
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:attribute>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="fonts">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:font" minOccurs="0" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="field" type="lqr:fieldObject" />
+	
+	<xsd:element name="fields">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:field" maxOccurs="unbounded" />
+			</xsd:sequence>
+		</xsd:complexType>
+		
+		<xsd:key name="keyFieldId">
+			<xsd:selector xpath="lqr:field" />
+			<xsd:field xpath="@id" />
+		</xsd:key>
+		
+		<xsd:keyref name="keyFieldIdRef" refer="lqr:keyFieldId">
+			<xsd:selector xpath="lqr:field" />
+			<xsd:field xpath="@fieldId" />
+		</xsd:keyref>
+	</xsd:element>
+	
+	<xsd:element name="item" type="lqr:object" />
+	
+	<xsd:element name="docBody">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="pageHeader">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="docHeader">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="docFooter">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="pageFooter">
+		<xsd:complexType>
+			<xsd:complexContent>
+				<xsd:extension base="lqr:docBand" />
+			</xsd:complexContent>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="body">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:pageHeader" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:docHeader" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:docBody" />
+				<xsd:element ref="lqr:docFooter" minOccurs="0" maxOccurs="1" />
+				<xsd:element ref="lqr:pageFooter" minOccurs="0" maxOccurs="1" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="connection">
+		<xsd:complexType>
+			<xsd:attribute name="driver" type="xsd:string" use="required" />
+			<xsd:attribute name="host" type="xsd:string" use="required" />
+			<xsd:attribute name="userName" type="xsd:string" use="required" />
+			<xsd:attribute name="password" type="xsd:string" use="required" />
+			<xsd:attribute name="dbName" type="xsd:string" use="required" />
+		</xsd:complexType>
+	</xsd:element>
+	
+	<xsd:element name="query">
+		<xsd:simpleType>
+			<xsd:restriction base="xsd:string"/>
+		</xsd:simpleType>
+	</xsd:element>
+	
+	<xsd:element name="database">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:connection" />
+				<xsd:element ref="lqr:query" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+			
+	<xsd:element name="document">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref="lqr:fonts" minOccurs="0" />
+				<xsd:element ref="lqr:fields" />
+				<xsd:element ref="lqr:database" />
+				<xsd:element ref="lqr:body" />
+			</xsd:sequence>
+			<xsd:attribute name="pageWidth" type="xsd:int" use="required" />
+			<xsd:attribute name="pageHeight" type="xsd:int" use="required" />
+		</xsd:complexType>
+		
+		<xsd:unique name="uniqueFontId">
+			<xsd:selector xpath="lqr:fonts/lqr:font" />
+			<xsd:field xpath="@id" />
+		</xsd:unique>
+		
+		<xsd:unique name="uniqueFieldId">
+			<xsd:selector xpath="lqr:fields/lqr:field" />
+			<xsd:field xpath="@id" />
+		</xsd:unique>
+		
+		<xsd:unique name="uniqueItemId">
+			<xsd:selector xpath="lqr:body/*/lqr:item" />
+			<xsd:field xpath="@id" />
+		</xsd:unique>
+		
+		<xsd:keyref name="uniqueFontIdRef" refer="lqr:uniqueFontId">
+			<xsd:selector xpath="lqr:body/*/lqr:item" />
+			<xsd:field xpath="@fontId" />
+		</xsd:keyref>
+		
+		<xsd:keyref name="uniqueFieldIdRef" refer="lqr:uniqueFieldId">
+			<xsd:selector xpath="lqr:body/*/lqr:item" />
+			<xsd:field xpath="@fieldId" />
+		</xsd:keyref>
+	</xsd:element>
+</xsd:schema>
