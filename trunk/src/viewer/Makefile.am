@@ -27,7 +27,7 @@ viewerdir = $(datarootdir)/@PACKAGE@
 
 viewer_DATA = $(lrelease_FILES)
 
-dist_viewer_DATA = $(INTERFACES) $(TRANSLATE)  $(RESSOURCES)
+dist_viewer_DATA = $(INTERFACES) $(TRANSLATE)  $(RESSOURCES) test.xlqr viewer.qrc images/*.png
 
 moc_%.cpp: %.h
 	$(MOC) -o $@ $<
