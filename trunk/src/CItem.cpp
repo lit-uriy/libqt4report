@@ -5,18 +5,19 @@
 #include "CItem.h"
 #include "CFields.h"
 #include "CFonts.h"
+#include "CValueType.h"
 //------------------------------------------------------------------------------
 namespace libqt4report {
 	QString CItemText::toSvg(int &y) {
 		double coef=CPrintableObject::getCoef();
-		QString value=CPrintableObject::xmlEncode(getValue().toString());
+		QString value=CPrintableObject::xmlEncode(getValue());
 		QString align="";
 		QString style="style='";
-		CFont *font=CFonts::getInstance()->getFont(attributes.value("fontId"));
+		CFont *font=CFonts::getInstance()->getFont(getAttribute("fontId"));
 		QString color;
 		
-		if(attributes.contains("color")) {
-			color="stroke:"+attributes.value("color")+";fill:"+attributes.value("color")+";";
+		if(hasAttribute("color")) {
+			color="stroke:"+getAttribute("color")+";fill:"+getAttribute("color")+";";
 		}
 		
 		style+="font-family:"+font->getFamily()+";font-size:"+QString::number(font->getSize())+"pt;";
@@ -24,36 +25,55 @@ namespace libqt4report {
 		style+="font-style:"+font->getStyle()+";";
 		style+=color+"'";
 		
-		if(attributes.contains("align")) {
-			align="text-anchor='"+attributes.value("align")+"'";
+		if(hasAttribute("align")) {
+			align="text-anchor='"+getAttribute("align")+"'";
 		}
 		
 		return QString("<text x='%1' y='%2' "+align+" "+style+">%3</text>")
-			.arg((int)(attributes.value("x").toDouble()*coef))
-			.arg((int)((attributes.value("y").toDouble())*coef)+y)
+			.arg((int)(getAttribute("x").toDouble()*coef))
+			.arg((int)((getAttribute("y").toDouble())*coef)+y)
 			.arg(value);
 	}
 	//------------------------------------------------------------------------------
-	QVariant CItemTextFieldObject::getValue(void) {
-		QString fieldId=attributes.value("fieldId");
-		CField *field=CFields::getInstance()->getField(fieldId);
+	QString CItemTextFixedObject::getValue(void) {
+		return getAttribute("value");
+	}
+	//------------------------------------------------------------------------------
+	CItemTextFieldObject::~CItemTextFieldObject(void) {
+		delete value;
+	}
+	//------------------------------------------------------------------------------
+	void CItemTextFieldObject::createValue(QString fieldId) {
+		QString className="CValueType"+fieldId.left(1).toUpper()+fieldId.mid(1);
 		
-		return field->getFieldValue();
+		int id=QMetaType::type(className.toUtf8().data());
+		
+		if(id != 0) {
+			value=static_cast<CValueType *>(QMetaType::construct(id));
+		}
+	}
+	//------------------------------------------------------------------------------
+	QString CItemTextFieldObject::getValue(void) {
+		QString fieldId=getAttribute("fieldId");
+		CField *field=CFields::getInstance()->getField(fieldId);
+		value->setValue(field->getFieldValue());
+		
+		return value->toFormatedString(getAttribute("format"));
 	}
 	//------------------------------------------------------------------------------
 	QString CItemLineObject::toSvg(int &y) {
 		double coef=CPrintableObject::getCoef();
-		int height=(int)((attributes.value("height").toDouble())*coef);
+		int height=(int)((getAttribute("height").toDouble())*coef);
 		int x1, y1, x2, y2;
 		QString color="black";
 		
-		x1=(int)(attributes.value("x").toDouble()*coef);
-		y1=(int)((attributes.value("y").toDouble())*coef)+y;
-		x2=x1+(int)(attributes.value("width").toDouble()*coef);
+		x1=(int)(getAttribute("x").toDouble()*coef);
+		y1=(int)((getAttribute("y").toDouble())*coef)+y;
+		x2=x1+(int)(getAttribute("width").toDouble()*coef);
 		y2=y1+height;
 		
-		if(attributes.contains("color")) {
-			color=attributes.value("color");
+		if(hasAttribute("color")) {
+			color=getAttribute("color");
 		}
 		
 		return QString("<line x1='%1' y1='%2' x2='%3' y2='%4' style='stroke:"+color+";stroke-width:1;' />")
@@ -64,8 +84,8 @@ namespace libqt4report {
 		double coef=CPrintableObject::getCoef();
 		int y, height;
 		
-		y=(int)((attributes.value("y").toDouble())*coef);
-		height=(int)((attributes.value("height").toDouble())*coef);
+		y=(int)((getAttribute("y").toDouble())*coef);
+		height=(int)((getAttribute("height").toDouble())*coef);
 		
 		return y+height;
 	}
@@ -75,13 +95,13 @@ namespace libqt4report {
 		int x, yR, width, height;
 		QString color="black";
 		
-		x=(int)(attributes.value("x").toDouble()*coef);
-		yR=(int)((attributes.value("y").toDouble())*coef)+y;
-		width=(int)(attributes.value("width").toDouble()*coef);
-		height=(int)((attributes.value("height").toDouble())*coef);
+		x=(int)(getAttribute("x").toDouble()*coef);
+		yR=(int)((getAttribute("y").toDouble())*coef)+y;
+		width=(int)(getAttribute("width").toDouble()*coef);
+		height=(int)((getAttribute("height").toDouble())*coef);
 		
-		if(attributes.contains("color")) {
-			color=attributes.value("color");
+		if(hasAttribute("color")) {
+			color=getAttribute("color");
 		}
 		
 		return QString("<rect x='%1' y='%2' width='%3' height='%4' style='stroke:"+color+";stroke-width:1;fill:none;' />")

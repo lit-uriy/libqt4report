@@ -6,6 +6,7 @@
 #include "CDocumentParser.h"
 #include "CFields.h"
 #include "CFonts.h"
+#include "CValueType.h"
 //--------------------------------------------------------------------------------------------------------------
 namespace libqt4report {
 	static log4cpp::Category& logger = log4cpp::Category::getInstance("CDocumentParser");
@@ -13,11 +14,17 @@ namespace libqt4report {
 	CDocumentParser::CDocumentParser(void) {
 		qRegisterMetaType<CItemTextFixedObject>("CItemTextFixedObject");
 		qRegisterMetaType<CItemTextFieldObject>("CItemTextFieldObject");
+
 		qRegisterMetaType<CDbFieldObject>("CDbFieldObject");
 		qRegisterMetaType<CItemLineObject>("CItemLineObject");
 		qRegisterMetaType<CItemRectObject>("CItemRectObject");
 		qRegisterMetaType<CCalculatedFieldObject>("CCalculatedFieldObject");
 		qRegisterMetaType<CTotalFieldObject>("CTotalFieldObject");
+		
+		qRegisterMetaType<CValueTypeString>("CValueTypeString");
+		qRegisterMetaType<CValueTypeInteger>("CValueTypeInteger");
+		qRegisterMetaType<CValueTypeReal>("CValueTypeReal");
+		qRegisterMetaType<CValueTypeDate>("CValueTypeDate");
 		
 		document=0;
 		inFonts=inFields=inDatabase=inQuery=inBody=inField=inCDATA=false;
@@ -310,8 +317,12 @@ namespace libqt4report {
 				if(id != 0) {
 					item=static_cast<CItem *>(QMetaType::construct(id));
 				}
-			}else {
+			}else  {
 				if(item != 0) {
+					if(atts.localName(i) == "fieldId") {
+						CField *field=CFields::getInstance()->getField(atts.value(i));
+						((CItemTextFieldObject *)item)->createValue(field->getAttribute("dataType"));
+					}
 					item->setAttribute(atts.localName(i), atts.value(i));
 				}
 			}
